@@ -24,7 +24,7 @@ int main(int argc, char**argv)
 	using namespace raf;
 	jobsys js;
 
-	// init job #1 to be executing getone per jobsys::next is called.
+	// init job #0 to be executing getone per jobsys::next is called.
 	js.init(0, &getone, 0);
 	// start jobsys
 	js.start();
@@ -39,13 +39,13 @@ int main(int argc, char**argv)
 		int myint = i;
 
 		// done preping other stuff
-		// wait for job #1 is done
+		// wait for job #0 is done
 		js.wait(0);
 
-		// use result from job #1 somehow
+		// use result from job #0 somehow
 		std::cout << global_int + myint << std::endl;
 
-		// mark result from job #1 used
+		// mark result from job #0 used
 		// jobsys::done needs to be called per jobsys::wait is called.
 		js.done(0);
 	}
