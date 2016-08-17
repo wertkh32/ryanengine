@@ -1,11 +1,13 @@
-//////////////////////////////////////////////////////////////////////////////
+//*********************************************************
 //
-//  Copyright (C) Microsoft Corporation.  All Rights Reserved.
+// Copyright (c) Microsoft. All rights reserved.
+// This code is licensed under the MIT License (MIT).
+// THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+// ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+// IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+// PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 //
-//  File:       d3dx12.h
-//  Content:    D3DX12 utility library
-//
-//////////////////////////////////////////////////////////////////////////////
+//*********************************************************
 
 #ifndef __D3DX12_H__
 #define __D3DX12_H__
@@ -48,7 +50,7 @@ struct CD3DX12_RECT : public D3D12_RECT
         bottom = Bottom;
     }
     ~CD3DX12_RECT() {}
-//    operator const D3D12_RECT&() const { return *this; }
+    operator const D3D12_RECT&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -99,7 +101,7 @@ struct CD3DX12_BOX : public D3D12_BOX
         back = Back;
     }
     ~CD3DX12_BOX() {}
-//    operator const D3D12_BOX&() const { return *this; }
+    operator const D3D12_BOX&() const { return *this; }
 };
 inline bool operator==( const D3D12_BOX& l, const D3D12_BOX& r )
 {
@@ -162,7 +164,7 @@ struct CD3DX12_DEPTH_STENCIL_DESC : public D3D12_DEPTH_STENCIL_DESC
         BackFace.StencilFunc = backStencilFunc;
     }
     ~CD3DX12_DEPTH_STENCIL_DESC() {}
-//    operator const D3D12_DEPTH_STENCIL_DESC&() const { return *this; }
+    operator const D3D12_DEPTH_STENCIL_DESC&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -189,7 +191,7 @@ struct CD3DX12_BLEND_DESC : public D3D12_BLEND_DESC
             RenderTarget[ i ] = defaultRenderTargetBlendDesc;
     }
     ~CD3DX12_BLEND_DESC() {}
-//    operator const D3D12_BLEND_DESC&() const { return *this; }
+    operator const D3D12_BLEND_DESC&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -240,7 +242,7 @@ struct CD3DX12_RASTERIZER_DESC : public D3D12_RASTERIZER_DESC
         ConservativeRaster = conservativeRaster;
     }
     ~CD3DX12_RASTERIZER_DESC() {}
-//    operator const D3D12_RASTERIZER_DESC&() const { return *this; }
+    operator const D3D12_RASTERIZER_DESC&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -258,7 +260,7 @@ struct CD3DX12_RESOURCE_ALLOCATION_INFO : public D3D12_RESOURCE_ALLOCATION_INFO
         SizeInBytes = size;
         Alignment = alignment;
     }
-//    operator const D3D12_RESOURCE_ALLOCATION_INFO&() const { return *this; }
+    operator const D3D12_RESOURCE_ALLOCATION_INFO&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -292,7 +294,7 @@ struct CD3DX12_HEAP_PROPERTIES : public D3D12_HEAP_PROPERTIES
         CreationNodeMask = creationNodeMask;
         VisibleNodeMask = nodeMask;
     }
-//    operator const D3D12_HEAP_PROPERTIES&() const { return *this; }
+    operator const D3D12_HEAP_PROPERTIES&() const { return *this; }
     bool IsCPUAccessible() const
     {
         return Type == D3D12_HEAP_TYPE_UPLOAD || Type == D3D12_HEAP_TYPE_READBACK || (Type == D3D12_HEAP_TYPE_CUSTOM &&
@@ -382,7 +384,7 @@ struct CD3DX12_HEAP_DESC : public D3D12_HEAP_DESC
         Alignment = resAllocInfo.Alignment;
         Flags = flags;
     }
-//    operator const D3D12_HEAP_DESC&() const { return *this; }
+    operator const D3D12_HEAP_DESC&() const { return *this; }
     bool IsCPUAccessible() const
     { return static_cast< const CD3DX12_HEAP_PROPERTIES* >( &Properties )->IsCPUAccessible(); }
 };
@@ -421,7 +423,7 @@ struct CD3DX12_CLEAR_VALUE : public D3D12_CLEAR_VALUE
         memcpy( &DepthStencil.Depth, &depth, sizeof( depth ) );
         DepthStencil.Stencil = stencil;
     }
-//    operator const D3D12_CLEAR_VALUE&() const { return *this; }
+    operator const D3D12_CLEAR_VALUE&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -439,7 +441,31 @@ struct CD3DX12_RANGE : public D3D12_RANGE
         Begin = begin;
         End = end;
     }
-//    operator const D3D12_RANGE&() const { return *this; }
+    operator const D3D12_RANGE&() const { return *this; }
+};
+
+//------------------------------------------------------------------------------------------------
+struct CD3DX12_SHADER_BYTECODE : public D3D12_SHADER_BYTECODE
+{
+    CD3DX12_SHADER_BYTECODE()
+    {}
+    explicit CD3DX12_SHADER_BYTECODE(const D3D12_SHADER_BYTECODE &o) :
+        D3D12_SHADER_BYTECODE(o)
+    {}
+    CD3DX12_SHADER_BYTECODE(
+        ID3DBlob* pShaderBlob )
+    {
+        pShaderBytecode = pShaderBlob->GetBufferPointer();
+        BytecodeLength = pShaderBlob->GetBufferSize();
+    }
+    CD3DX12_SHADER_BYTECODE(
+        void* _pShaderBytecode,
+        SIZE_T bytecodeLength )
+    {
+        pShaderBytecode = _pShaderBytecode;
+        BytecodeLength = bytecodeLength;
+    }
+    operator const D3D12_SHADER_BYTECODE&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -461,7 +487,7 @@ struct CD3DX12_TILED_RESOURCE_COORDINATE : public D3D12_TILED_RESOURCE_COORDINAT
         Z = z;
         Subresource = subresource;
     }
-//    operator const D3D12_TILED_RESOURCE_COORDINATE&() const { return *this; }
+    operator const D3D12_TILED_RESOURCE_COORDINATE&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -485,7 +511,7 @@ struct CD3DX12_TILE_REGION_SIZE : public D3D12_TILE_REGION_SIZE
         Height = height;
         Depth = depth;
     }
-//    operator const D3D12_TILE_REGION_SIZE&() const { return *this; }
+    operator const D3D12_TILE_REGION_SIZE&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -507,7 +533,7 @@ struct CD3DX12_SUBRESOURCE_TILING : public D3D12_SUBRESOURCE_TILING
         DepthInTiles = depthInTiles;
         StartTileIndexInOverallResource = startTileIndexInOverallResource;
     }
-//    operator const D3D12_SUBRESOURCE_TILING&() const { return *this; }
+    operator const D3D12_SUBRESOURCE_TILING&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -527,7 +553,7 @@ struct CD3DX12_TILE_SHAPE : public D3D12_TILE_SHAPE
         HeightInTexels = heightInTexels;
         DepthInTexels = depthInTexels;
     }
-//    operator const D3D12_TILE_SHAPE&() const { return *this; }
+    operator const D3D12_TILE_SHAPE&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -578,7 +604,7 @@ struct CD3DX12_RESOURCE_BARRIER : public D3D12_RESOURCE_BARRIER
         barrier.UAV.pResource = pResource;
         return result;
     }
-//    operator const D3D12_RESOURCE_BARRIER&() const { return *this; }
+    operator const D3D12_RESOURCE_BARRIER&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -600,7 +626,7 @@ struct CD3DX12_PACKED_MIP_INFO : public D3D12_PACKED_MIP_INFO
         NumTilesForPackedMips = numTilesForPackedMips;
         StartTileIndexInOverallResource = startTileIndexInOverallResource;
     }
-//    operator const D3D12_PACKED_MIP_INFO&() const { return *this; }
+    operator const D3D12_PACKED_MIP_INFO&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -634,7 +660,7 @@ struct CD3DX12_SUBRESOURCE_FOOTPRINT : public D3D12_SUBRESOURCE_FOOTPRINT
         Depth = (resDesc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE3D ? resDesc.DepthOrArraySize : 1);
         RowPitch = rowPitch;
     }
-//    operator const D3D12_SUBRESOURCE_FOOTPRINT&() const { return *this; }
+    operator const D3D12_SUBRESOURCE_FOOTPRINT&() const { return *this; }
 };
 
 //------------------------------------------------------------------------------------------------
@@ -1081,11 +1107,11 @@ struct CD3DX12_CPU_DESCRIPTOR_HANDLE : public D3D12_CPU_DESCRIPTOR_HANDLE
         ptr += offsetScaledByIncrementSize;
         return *this;
     }
-    bool operator==(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& other)
+    bool operator==(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& other) const
     {
         return (ptr == other.ptr);
     }
-    bool operator!=(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& other)
+    bool operator!=(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& other) const
     {
         return (ptr != other.ptr);
     }
@@ -1142,11 +1168,11 @@ struct CD3DX12_GPU_DESCRIPTOR_HANDLE : public D3D12_GPU_DESCRIPTOR_HANDLE
         ptr += offsetScaledByIncrementSize;
         return *this;
     }
-    inline bool operator==(_In_ const D3D12_GPU_DESCRIPTOR_HANDLE& other)
+    inline bool operator==(_In_ const D3D12_GPU_DESCRIPTOR_HANDLE& other) const
     {
         return (ptr == other.ptr);
     }
-    inline bool operator!=(_In_ const D3D12_GPU_DESCRIPTOR_HANDLE& other)
+    inline bool operator!=(_In_ const D3D12_GPU_DESCRIPTOR_HANDLE& other) const
     {
         return (ptr != other.ptr);
     }
@@ -1304,7 +1330,7 @@ struct CD3DX12_RESOURCE_DESC : public D3D12_RESOURCE_DESC
     { return MipLevels * ArraySize() * PlaneCount(pDevice); }
     inline UINT CalcSubresource(UINT MipSlice, UINT ArraySlice, UINT PlaneSlice)
     { return D3D12CalcSubresource(MipSlice, ArraySlice, PlaneSlice, MipLevels, ArraySize()); }
-//    operator const D3D12_RESOURCE_DESC&() const { return *this; }
+    operator const D3D12_RESOURCE_DESC&() const { return *this; }
 };
 inline bool operator==( const D3D12_RESOURCE_DESC& l, const D3D12_RESOURCE_DESC& r )
 {
@@ -1356,7 +1382,7 @@ inline UINT64 GetRequiredIntermediateSize(
     UINT64 RequiredSize = 0;
     
     ID3D12Device* pDevice;
-    pDestinationResource->GetDevice(__uuidof(ID3D12Device), reinterpret_cast<void**>(&pDevice));
+    pDestinationResource->GetDevice(__uuidof(*pDevice), reinterpret_cast<void**>(&pDevice));
     pDevice->GetCopyableFootprints(&Desc, FirstSubresource, NumSubresources, 0, nullptr, nullptr, nullptr, &RequiredSize);
     pDevice->Release();
     
@@ -1450,7 +1476,7 @@ inline UINT64 UpdateSubresources(
     
     D3D12_RESOURCE_DESC Desc = pDestinationResource->GetDesc();
     ID3D12Device* pDevice;
-    pDestinationResource->GetDevice(__uuidof(ID3D12Device), reinterpret_cast<void**>(&pDevice));
+    pDestinationResource->GetDevice(__uuidof(*pDevice), reinterpret_cast<void**>(&pDevice));
     pDevice->GetCopyableFootprints(&Desc, FirstSubresource, NumSubresources, IntermediateOffset, pLayouts, pNumRows, pRowSizesInBytes, &RequiredSize);
     pDevice->Release();
     

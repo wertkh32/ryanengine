@@ -1,9 +1,12 @@
 #pragma once
 #include "universal.h"
+#include "platform.h"
+#include "game_renderer.h"
 class Game_Engine
 {
 private:
 	Game_Engine();
+	Game_Renderer	renderer;
 public:
 	static Game_Engine* Instance()
 	{
@@ -15,7 +18,7 @@ public:
 	}
 
 	void ParseArgs( _WCHARSTR_* argv, int arg_count );
-	void InitRenderer( _CTX_HANDLE_ contextHandle );
+	void Init( _CTX_HANDLE_ contextHandle );
 	
 	void FrameCallback();
 	void Render();

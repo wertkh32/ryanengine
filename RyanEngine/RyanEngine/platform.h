@@ -26,4 +26,7 @@
 #include <shellapi.h>
 #include <wrl.h>
 
+#define DXERROR(x) if(FAILED(x)){ printf(#x); }
+#define GFX_FRAMEBUFFER_FORMAT DXGI_FORMAT_R8G8B8A8_UNORM
+
 #endif //#if USE( DX12_API )
