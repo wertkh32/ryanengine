@@ -5,4 +5,6 @@
 
 #include <math.h>
 #include <string>
+#include <xmmintrin.h>
+#include <smmintrin.h>
 

@@ -19,6 +19,9 @@
     <Filter Include="gfx\Shaders">
       <UniqueIdentifier>{8d20f7db-7247-48d7-a460-e91cab59009a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{ee9dbcb4-f184-4d91-b29e-eec652226d53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="universal.h">
@@ -44,6 +47,12 @@
     </ClInclude>
     <ClInclude Include="gfx_backend.h">
       <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="vec4_math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="mat4x4_math.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

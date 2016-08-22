@@ -121,9 +121,11 @@
     <ClInclude Include="game_init_win32.h" />
     <ClInclude Include="game_renderer.h" />
     <ClInclude Include="gfx_backend.h" />
+    <ClInclude Include="mat4x4_math.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="universal.h" />
+    <ClInclude Include="vec4_math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_engine.cpp" />
