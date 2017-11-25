@@ -4,7 +4,13 @@
 
 struct vec4
 {
-	__m128 mmval;
+	union
+	{
+		__m128 mmval;
+		float_t	ALIGN(16) ptr[4];
+		struct { float_t x, y, z, w; };
+	};
+
 	vec4(const float* val, bool aligned)
 	{
 		if(aligned)
@@ -128,7 +134,8 @@ struct vec4
 		mmval = _mm_div_ps(mmval, mul);
 	}
 
-	inline vec4 swizzle(uint a, uint b, uint c, uint d)
+	template<int a, int b, int c, int d>
+	inline vec4 swizzle()
 	{
 		const __m128 ret = _mm_permute_ps(mmval, _MM_SHUFFLE(a, b, c, d));
 		return vec4(ret);
@@ -139,19 +146,23 @@ struct vec4
 		return _mm_cvtss_f32( _mm_dp_ps( mmval, b.mmval, 0xF1 ) );
 	}
 
+	inline vec4 cross(const vec4& b)
+	{
+		return _mm_sub_ps(
+							_mm_mul_ps(_mm_shuffle_ps(mmval, mmval, _MM_SHUFFLE(0, 2, 1, 3)), _mm_shuffle_ps(b.mmval, b.mmval, _MM_SHUFFLE(1, 0, 2, 3))),
+							_mm_mul_ps(_mm_shuffle_ps(mmval, mmval, _MM_SHUFFLE(1, 0, 2, 3)), _mm_shuffle_ps(b.mmval, b.mmval, _MM_SHUFFLE(0, 2, 1, 3)))
+						 );
+	}
+
 	inline vec4 fma(const vec4& b, const vec4& c)
 	{
 		const __m128 ret = _mm_fmadd_ps(mmval, b.mmval, c.mmval);
 		return vec4(ret);
 	}
+
 };
 
 inline vec4 operator*(float b, vec4& v)
 {
 	return v * b;
-}
-
-inline vec4 operator/(float b, vec4& v)
-{
-	return v / b;
 }

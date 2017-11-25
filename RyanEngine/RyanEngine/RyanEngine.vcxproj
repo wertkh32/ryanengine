@@ -116,23 +116,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="gfx_constantbuffers.h" />
+    <ClInclude Include="gfx_descheap.h" />
     <ClInclude Include="feature.h" />
     <ClInclude Include="game_engine.h" />
     <ClInclude Include="game_init_win32.h" />
-    <ClInclude Include="game_renderer.h" />
     <ClInclude Include="gfx_backend.h" />
+    <ClInclude Include="gfx_dx12_types.h" />
+    <ClInclude Include="gfx_globals.h" />
+    <ClInclude Include="gfx_math.h" />
+    <ClInclude Include="gfx_pipelinestates.h" />
     <ClInclude Include="mat4x4_math.h" />
+    <ClInclude Include="math_macros.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="universal.h" />
+    <ClInclude Include="vec3_math.h" />
     <ClInclude Include="vec4_math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_engine.cpp" />
     <ClCompile Include="game_init_win32.cpp" />
     <ClCompile Include="game_main.cpp" />
-    <ClCompile Include="game_renderer.cpp" />
     <ClCompile Include="gfx_backend.cpp" />
+    <ClCompile Include="gfx_constantbuffers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\shaders.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

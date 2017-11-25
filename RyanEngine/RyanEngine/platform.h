@@ -1,4 +1,6 @@
 #pragma once
+// put platform defines and settings ( platform is defined in feature.h ) here.
+
 #include "feature.h"
 
 #if USE( PLATFORM_WIN32 )
@@ -28,5 +30,7 @@
 
 #define DXERROR(x) if(FAILED(x)){ printf(#x); }
 #define GFX_FRAMEBUFFER_FORMAT DXGI_FORMAT_R8G8B8A8_UNORM
+#define GFX_DEPTH_STENCIL_FORMAT DXGI_FORMAT_D32_FLOAT // no stencil. not yet
+#define GFX_DSV_ELEMENT_SIZE	4 // 32 bits. update this when GFX_DEPTH_STENCIL_FORMAT changes
 
 #endif //#if USE( DX12_API )

@@ -2,16 +2,17 @@
 #include "universal.h"
 #include "vec4_math.h"
 
-struct mat4x4
+union mat4x4
 {
 	vec4 row[4];
+	float_t ALIGN(16) floatArray[16];
 
 	mat4x4()
 	{
-		row[0] = _mm_set_ps(1.0f, 0.0f, 0.0f, 0.0f);
-		row[1] = _mm_set_ps(0.0f, 1.0f, 0.0f, 0.0f);
-		row[2] = _mm_set_ps(0.0f, 0.0f, 1.0f, 0.0f);
-		row[3] = _mm_set_ps(0.0f, 0.0f, 0.0f, 1.0f);
+		row[0] = _mm_setr_ps(1.0f, 0.0f, 0.0f, 0.0f);
+		row[1] = _mm_setr_ps(0.0f, 1.0f, 0.0f, 0.0f);
+		row[2] = _mm_setr_ps(0.0f, 0.0f, 1.0f, 0.0f);
+		row[3] = _mm_setr_ps(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	mat4x4(mat4x4& m)
@@ -43,10 +44,10 @@ struct mat4x4
 		   float _20, float _21, float _22, float _23, 
 		   float _30, float _31, float _32, float _33)
 	{
-		row[0] = _mm_set_ps(_00, _01, _02, _03);
-		row[1] = _mm_set_ps(_10, _11, _12, _13);
-		row[2] = _mm_set_ps(_20, _21, _22, _23);
-		row[3] = _mm_set_ps(_30, _31, _32, _33);
+		row[0] = _mm_setr_ps(_00, _01, _02, _03);
+		row[1] = _mm_setr_ps(_10, _11, _12, _13);
+		row[2] = _mm_setr_ps(_20, _21, _22, _23);
+		row[3] = _mm_setr_ps(_30, _31, _32, _33);
 	}
 
 	mat4x4 transpose()
@@ -85,5 +86,16 @@ struct mat4x4
 		vec4 ret3 = *this * tmp.row[3];
 
 		return mat4x4( ret0, ret1, ret2, ret3 );
+	}
+
+	mat4x4 inverse()
+	{
+		//to do
+		return mat4x4();
+	}
+
+	float_t* getPtr()
+	{
+		return floatArray;
 	}
 };

@@ -42,9 +42,6 @@
     <ClInclude Include="types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game_renderer.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
     <ClInclude Include="gfx_backend.h">
       <Filter>gfx</Filter>
     </ClInclude>
@@ -53,6 +50,30 @@
     </ClInclude>
     <ClInclude Include="mat4x4_math.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="vec3_math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math_macros.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_constantbuffers.h">
+      <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_descheap.h">
+      <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_pipelinestates.h">
+      <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_globals.h">
+      <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_dx12_types.h">
+      <Filter>gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -65,11 +86,16 @@
     <ClCompile Include="game_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game_renderer.cpp">
-      <Filter>gfx</Filter>
-    </ClCompile>
     <ClCompile Include="gfx_backend.cpp">
       <Filter>gfx</Filter>
     </ClCompile>
+    <ClCompile Include="gfx_constantbuffers.cpp">
+      <Filter>gfx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\shaders.hlsl">
+      <Filter>gfx\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

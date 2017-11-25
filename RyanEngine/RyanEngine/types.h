@@ -1,10 +1,11 @@
 #pragma once
 #include "universal.h"
 
-typedef unsigned int uint;
-typedef unsigned char uchar;
-typedef unsigned short ushort;
-typedef unsigned long ulong;
+typedef unsigned int	uint;
+typedef unsigned char	uchar;
+typedef unsigned short	ushort;
+typedef unsigned long	ulong;
+typedef uchar			byte;
 
 typedef float float2[2];
 typedef float float3[3];
@@ -35,7 +36,9 @@ struct VertexPosColNorm
 
 #if USE( PLATFORM_WIN32 )
 
-#define _CTX_HANDLE_	HWND
-#define _WCHARSTR_		LPWSTR
+typedef HWND ctx_handle_t;
+typedef LPWSTR _WCHARSTR_;
+
+typedef float	float_t;
 
 #endif //#if USE( PLATFORM_WIN32 )

@@ -9,9 +9,10 @@ void Game_Engine::ParseArgs(_WCHARSTR_ * argv, int arg_count)
 
 }
 
-void Game_Engine::Init( _CTX_HANDLE_ contextHandle)
+void Game_Engine::Init( ctx_handle_t contextHandle)
 {
-	renderer.InitRenderer(contextHandle);
+	memset ( &renderer, 0, sizeof ( renderer ) );
+	renderer.Init(contextHandle);
 }
 
 void Game_Engine::FrameCallback()
@@ -21,7 +22,7 @@ void Game_Engine::FrameCallback()
 
 void Game_Engine::Render()
 {
-	renderer.DrawFrame();
+	renderer.Render();
 }
 
 void Game_Engine::OnKeyDown(uchar key)
