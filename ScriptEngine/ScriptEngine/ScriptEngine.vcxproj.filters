@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="cpython">
+      <UniqueIdentifier>{548eb32d-7df0-47af-9396-bc6fdc15db94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpython\include">
+      <UniqueIdentifier>{21ae6c3a-ff16-4f73-9b5e-9533c62701c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpython\libs">
+      <UniqueIdentifier>{706262d3-315b-450d-bc30-a2b584e3aba4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cpython\include\abstract.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\accu.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\asdl.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\ast.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\bitset.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\bltinmodule.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\boolobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\bytearrayobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\bytes_methods.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\bytesobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\cellobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\ceval.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\classobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\code.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\codecs.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\compile.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\complexobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\datetime.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\descrobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\dictobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\dtoa.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\dynamic_annotations.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\enumobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\errcode.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\eval.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\fileobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\fileutils.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\floatobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\frameobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\funcobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\genobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\graminit.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\grammar.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\import.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\intrcheck.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\iterobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\listobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\longintrepr.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\longobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\marshal.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\memoryobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\metagrammar.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\methodobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\modsupport.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\moduleobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\namespaceobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\node.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\object.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\objimpl.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\odictobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\opcode.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\osdefs.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\osmodule.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\parsetok.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\patchlevel.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pgen.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pgenheaders.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\py_curses.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyarena.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyatomic.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pycapsule.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyconfig.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyctype.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pydebug.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pydtrace.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyerrors.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyexpat.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyfpe.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pygetopt.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyhash.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pylifecycle.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pymacconfig.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pymacro.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pymath.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pymem.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pyport.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pystate.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pystrcmp.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pystrhex.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pystrtod.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\Python.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\Python-ast.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pythonrun.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pythread.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\pytime.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\rangeobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\setobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\sliceobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\structmember.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\structseq.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\symtable.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\sysmodule.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\token.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\traceback.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\tupleobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\typeslots.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\ucnhash.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\unicodeobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\warnings.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+    <ClInclude Include="cpython\include\weakrefobject.h">
+      <Filter>cpython\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpython\include\pydtrace.d">
+      <Filter>cpython\include</Filter>
+    </None>
+    <None Include="cpython\libs\python36.dll">
+      <Filter>cpython\libs</Filter>
+    </None>
+    <None Include="cpython\libs\python36_d.dll">
+      <Filter>cpython\libs</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="cpython\libs\python36.lib">
+      <Filter>cpython\libs</Filter>
+    </Library>
+    <Library Include="cpython\libs\python36_d.lib">
+      <Filter>cpython\libs</Filter>
+    </Library>
+  </ItemGroup>
+</Project>
