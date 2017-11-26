@@ -75,6 +75,9 @@
     <ClInclude Include="gfx_dx12_types.h">
       <Filter>gfx</Filter>
     </ClInclude>
+    <ClInclude Include="quatn.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_main.cpp">
@@ -91,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="gfx_constantbuffers.cpp">
       <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="quatn.cpp">
+      <Filter>math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

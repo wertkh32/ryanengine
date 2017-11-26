@@ -44,10 +44,10 @@ union mat4x4
 		   float _20, float _21, float _22, float _23, 
 		   float _30, float _31, float _32, float _33)
 	{
-		row[0] = _mm_setr_ps(_00, _01, _02, _03);
-		row[1] = _mm_setr_ps(_10, _11, _12, _13);
-		row[2] = _mm_setr_ps(_20, _21, _22, _23);
-		row[3] = _mm_setr_ps(_30, _31, _32, _33);
+		row[0].mmval = _mm_setr_ps ( _00, _01, _02, _03 );
+		row[1].mmval = _mm_setr_ps ( _10, _11, _12, _13 );
+		row[2].mmval = _mm_setr_ps ( _20, _21, _22, _23 );
+		row[3].mmval = _mm_setr_ps ( _30, _31, _32, _33 );
 	}
 
 	mat4x4 transpose()
@@ -57,11 +57,11 @@ union mat4x4
 		__m128 tmp2 = _mm_unpacklo_ps(row[2], row[3]);
 		__m128 tmp3 = _mm_unpackhi_ps(row[2], row[3]);
 
-		__m128 ret0 = _mm_movelh_ps(tmp0, tmp1);
-		__m128 ret1 = _mm_movehl_ps(tmp0, tmp1);
+		__m128 ret0 = _mm_movelh_ps(tmp0, tmp2);
+		__m128 ret1 = _mm_movehl_ps(tmp2, tmp0);
 		
-		__m128 ret2 = _mm_movelh_ps(tmp2, tmp3);
-		__m128 ret3 = _mm_movehl_ps(tmp2, tmp3);
+		__m128 ret2 = _mm_movelh_ps(tmp1, tmp3);
+		__m128 ret3 = _mm_movehl_ps(tmp3, tmp1);
 
 		return mat4x4(ret0, ret1, ret2, ret3);
 	}

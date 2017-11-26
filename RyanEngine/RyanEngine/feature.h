@@ -8,3 +8,4 @@
 #define PLATFORM_WIN32	IN_USE
 #define DX12_API		IN_USE
 #define DEBUG_LAYER		IN_USE
+

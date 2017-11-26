@@ -21,6 +21,14 @@ struct GfxPerFrameData
 };
 
 
+struct GfxViewInfo
+{
+	mat4x4 projectionMat;
+	mat4x4 viewMat;
+	vec3   cameraPos;
+};
+
+
 struct GfxPerFrameDataDyn
 {	// for dynamic perframe data
 	uint frameNum;
@@ -176,7 +184,7 @@ static void Gfx_InitFrameBuffersAndCommandAllocators(gfx_device_t* gfxDevice, gf
 	
 	D3D12_CLEAR_VALUE clearValue;
 	clearValue.Format = GFX_DEPTH_STENCIL_FORMAT;
-	clearValue.DepthStencil = { 1.0f, 0U };
+	clearValue.DepthStencil = { 0.0f, 0U };
 
 	D3D12_DEPTH_STENCIL_VIEW_DESC depthDesc;
 	depthDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
@@ -314,6 +322,7 @@ struct GfxGameRenderer
 	gfx_rootsignature_t		*gfxRootSignature;
 
 	GfxPerFrameData			perFrameData[NUM_FRAMEBUFFERS];
+	GfxViewInfo				viewInfo;
 
 	uint					frameCount;
 	uint					frameIndex;
@@ -347,6 +356,18 @@ struct GfxGameRenderer
 
 		gfxScissorRect.right = static_cast<LONG>( WINDOWED_WIDTH );
 		gfxScissorRect.bottom = static_cast<LONG>( WINDOWED_HEIGHT );
+	}
+
+
+	void InitViewInfo ()
+	{
+		viewInfo.cameraPos = vec3 ( 0, 0, 50 );
+		viewInfo.projectionMat = Gfx_CalculateProjectionMatrix ( 4.0f, WINDOWED_WIDTH, WINDOWED_HEIGHT, M_PI_2 );
+		viewInfo.viewMat = mat4x4 ();
+
+		viewInfo.viewMat.row[0].w = -viewInfo.cameraPos.x;
+		viewInfo.viewMat.row[1].w = -viewInfo.cameraPos.y;
+		viewInfo.viewMat.row[2].w = -viewInfo.cameraPos.z;
 	}
 
 
@@ -467,6 +488,7 @@ struct GfxGameRenderer
 		psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC ( D3D12_DEFAULT );
 		psoDesc.DepthStencilState.DepthEnable = TRUE;
 		psoDesc.DepthStencilState.StencilEnable = FALSE;
+		psoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_GREATER_EQUAL;
 		psoDesc.SampleMask = UINT_MAX;
 		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 		psoDesc.NumRenderTargets = 1;
@@ -488,9 +510,9 @@ struct GfxGameRenderer
 			// Define the geometry for a triangle.
 			VertexPosCol triangleVertices[] =
 			{
-				{ { 0.0f, 0.25f, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } },
-				{ { 0.25f, -0.25f, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } },
-				{ { -0.25f, -0.25f, 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } }
+				{ { 0.0f, 20.0f, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } },
+				{ { 20.0f, 0.0f, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } },
+				{ { 0.0f, 0.0f,	 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } }
 			};
 
 			const uint vertexBufferSize = sizeof ( triangleVertices );
@@ -561,8 +583,9 @@ struct GfxGameRenderer
 	{
 		ctxHandle = windowHandle;
 
-		InitViewPortAndScissor ();
 		InitHWInterfaces();
+		InitViewPortAndScissor ();
+		InitViewInfo ();
 		InitGfxPipeline();
 
 		InitDefaultPipelineState (); // temporary
@@ -619,10 +642,11 @@ struct GfxGameRenderer
 	void UpdateTransformConstantBuffer ( GfxPerFrameData *curFrameData  )
 	{
 		gfx_transform_buffer_t transformData;
-		
-		transformData.worldMatrix = mat4x4 ();
-		transformData.viewMatrix = mat4x4 ();
-		transformData.projectionMatrix = mat4x4 ();
+		quatn worldRot ( vec3 ( 0, 0, -1 ), TO_RAD ( frameCount / 60.f ) );
+
+		transformData.worldMatrix = worldRot.toRotMatrix();
+		transformData.viewMatrix = viewInfo.viewMat;
+		transformData.projectionMatrix = viewInfo.projectionMat;
 		
 		memcpy ( curFrameData->gfxConstantBufferData[GFX_TRANSFORM_CONSTANT_BUFFER], &transformData, GFX_TRANSFORM_CONSTANT_BUFFER_SIZE );
 	}
@@ -661,7 +685,7 @@ struct GfxGameRenderer
 		
 		const float clearColor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		gfxCmdList->ClearRenderTargetView ( rtvHandle, clearColor, 0, nullptr );
-		gfxCmdList->ClearDepthStencilView ( dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr );
+		gfxCmdList->ClearDepthStencilView ( dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 0.0f, 0, 0, nullptr );
 		
 		
 		gfx_descheap_t* descriptorHeaps[] = { curFrameData->gfxCBVDescHeap };
@@ -689,6 +713,8 @@ struct GfxGameRenderer
 
 		const UINT64 currentFenceValue = curFrameData->gfxEndFrameFenceValue;
 		DXERROR ( gfxCmdQueue->Signal ( curFrameData->gfxEndFrameFence, currentFenceValue ) );
+
+		frameCount++;
 
 		WaitPreviousEndFrameFence ();
 	}

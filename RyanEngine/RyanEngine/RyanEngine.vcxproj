@@ -129,6 +129,7 @@
     <ClInclude Include="mat4x4_math.h" />
     <ClInclude Include="math_macros.h" />
     <ClInclude Include="platform.h" />
+    <ClInclude Include="quatn.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="universal.h" />
     <ClInclude Include="vec3_math.h" />
@@ -140,6 +141,7 @@
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="gfx_backend.cpp" />
     <ClCompile Include="gfx_constantbuffers.cpp" />
+    <ClCompile Include="quatn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\shaders.hlsl">

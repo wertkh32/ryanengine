@@ -15,7 +15,7 @@ PSInput vsmain(float3 position : POSITION, float4 color : COLOR )
 {
 	PSInput result;
 
-	result.position = mul ( projectionMatrix, mul ( viewMatrix, mul ( worldMatrix, float4(position, 1.0) ) ) );
+	result.position = mul ( mul ( mul ( float4(position, 1.0), worldMatrix ), viewMatrix ), projectionMatrix );
 	result.color = color;
 
 	return result;
