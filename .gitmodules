@@ -1,0 +1,4 @@
+[submodule "cpython"]
+	path = cpython
+	url = https://github.com/chiuup/cpython.git
+	branch = 3.6
