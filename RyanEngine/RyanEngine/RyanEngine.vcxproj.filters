@@ -66,9 +66,6 @@
     <ClInclude Include="gfx_descheap.h">
       <Filter>gfx</Filter>
     </ClInclude>
-    <ClInclude Include="gfx_pipelinestates.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
     <ClInclude Include="gfx_globals.h">
       <Filter>gfx</Filter>
     </ClInclude>
@@ -77,6 +74,15 @@
     </ClInclude>
     <ClInclude Include="quatn.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_types.h">
+      <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_state.h">
+      <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_material.h">
+      <Filter>gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +103,12 @@
     </ClCompile>
     <ClCompile Include="quatn.cpp">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_state.cpp">
+      <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_material.cpp">
+      <Filter>gfx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

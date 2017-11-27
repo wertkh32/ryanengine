@@ -3,7 +3,4 @@
 
 #include "feature.h"
 #include "types.h"
-
-#if USE( DX12_API )
-#include "gfx_dx12_types.h"
-#endif
+#include "gfx_types.h"

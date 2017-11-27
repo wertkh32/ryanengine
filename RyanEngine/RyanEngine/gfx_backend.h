@@ -2,7 +2,6 @@
 #include "universal.h"
 #include "gfx_globals.h"
 #include "gfx_descheap.h"
-#include "gfx_pipelinestates.h"
 #include "gfx_constantbuffers.h"
 #include "gfx_math.h"
 
@@ -362,7 +361,7 @@ struct GfxGameRenderer
 	void InitViewInfo ()
 	{
 		viewInfo.cameraPos = vec3 ( 0, 0, 50 );
-		viewInfo.projectionMat = Gfx_CalculateProjectionMatrix ( 4.0f, WINDOWED_WIDTH, WINDOWED_HEIGHT, M_PI_2 );
+		viewInfo.projectionMat = Gfx_CalculateProjectionMatrix ( 4.0f, static_cast< float >( WINDOWED_WIDTH ), static_cast< float >( WINDOWED_HEIGHT ), TO_RAD( 90.0f ) );
 		viewInfo.viewMat = mat4x4 ();
 
 		viewInfo.viewMat.row[0].w = -viewInfo.cameraPos.x;
@@ -512,7 +511,11 @@ struct GfxGameRenderer
 			{
 				{ { 0.0f, 20.0f, 0.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } },
 				{ { 20.0f, 0.0f, 0.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } },
-				{ { 0.0f, 0.0f,	 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } }
+				{ { 0.0f, 0.0f,	 0.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } },
+
+				{ { 0.0f, 30.0f, -1.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } },
+				{ { 30.0f, 0.0f, -1.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } },
+				{ { -30.0f, 0.0f, -1.0f },{ 1.0f, 0.0f, 1.0f, 1.0f } }
 			};
 
 			const uint vertexBufferSize = sizeof ( triangleVertices );
@@ -542,7 +545,7 @@ struct GfxGameRenderer
 
 		//create index buffer
 		{
-			ushort indexes[] = { 0, 1, 2 };
+			ushort indexes[] = { 0, 1, 2, 3, 4, 5 };
 
 			const uint indexBufferSize = sizeof ( indexes );
 
@@ -697,7 +700,7 @@ struct GfxGameRenderer
 		gfxCmdList->IASetPrimitiveTopology ( D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 		gfxCmdList->IASetIndexBuffer ( &defaultIndexBufferView );
 		gfxCmdList->IASetVertexBuffers ( 0, 1, &defaultVertexBufferView );
-		gfxCmdList->DrawIndexedInstanced ( 3, 1, 0, 0, 0 );
+		gfxCmdList->DrawIndexedInstanced ( 6, 1, 0, 0, 0 );
 		
 		// Indicate that the back buffer will now be used to present.
 		gfxCmdList->ResourceBarrier ( 1, &CD3DX12_RESOURCE_BARRIER::Transition ( curFrameData->gfxRenderTarget, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT ) );

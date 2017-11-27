@@ -40,6 +40,5 @@ typedef HANDLE								gfx_fence_event_t;
 
 typedef D3D12_VIEWPORT						gfx_viewport_t;
 typedef D3D12_RECT							gfx_rect_t;
-// extended types
 
 #endif 

@@ -124,8 +124,10 @@
     <ClInclude Include="gfx_backend.h" />
     <ClInclude Include="gfx_dx12_types.h" />
     <ClInclude Include="gfx_globals.h" />
+    <ClInclude Include="gfx_material.h" />
     <ClInclude Include="gfx_math.h" />
-    <ClInclude Include="gfx_pipelinestates.h" />
+    <ClInclude Include="gfx_state.h" />
+    <ClInclude Include="gfx_types.h" />
     <ClInclude Include="mat4x4_math.h" />
     <ClInclude Include="math_macros.h" />
     <ClInclude Include="platform.h" />
@@ -141,6 +143,8 @@
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="gfx_backend.cpp" />
     <ClCompile Include="gfx_constantbuffers.cpp" />
+    <ClCompile Include="gfx_material.cpp" />
+    <ClCompile Include="gfx_state.cpp" />
     <ClCompile Include="quatn.cpp" />
   </ItemGroup>
   <ItemGroup>
