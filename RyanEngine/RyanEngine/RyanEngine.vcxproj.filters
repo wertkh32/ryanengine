@@ -84,6 +84,12 @@
     <ClInclude Include="gfx_material.h">
       <Filter>gfx</Filter>
     </ClInclude>
+    <ClInclude Include="gfx_unifiedvertexbuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_memmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_main.cpp">
@@ -109,6 +115,12 @@
     </ClCompile>
     <ClCompile Include="gfx_material.cpp">
       <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_unifiedvertexbuffer.h.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_memmanager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -31,5 +31,9 @@ enum DISPLAY_RESOLUTIONS
 
 #define ALIGN( x ) __declspec( align( x ) )
 #define NEAREST_MULTIPLE( x, n ) ( ( (x) + ( (n) - 1 ) ) & ~( (n) - 1 ) )
+#define sassert( x ) static_assert( ( x ), #x )
+
+#define KB ( 1024 )
+#define MB ( KB * KB )
 
 // CPU side matrices are row major. GPU side matrices are column major

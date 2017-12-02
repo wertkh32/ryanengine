@@ -24,6 +24,7 @@ typedef ID3D12RootSignature			gfx_rootsignature_t;
 typedef ID3DBlob					gfx_memblob_t;
 typedef ID3D12Fence					gfx_fence_t;
 typedef ID3D12InfoQueue				gfx_info_queue_t;
+typedef ID3D12Heap					gfx_heap_t;
 
 // types
 typedef D3D12_COMMAND_LIST_TYPE				gfx_cmdlist_type_t;
@@ -35,10 +36,13 @@ typedef D3D12_INPUT_ELEMENT_DESC			gfx_input_desc_t;
 typedef D3D12_GRAPHICS_PIPELINE_STATE_DESC	gfx_pipeline_desc_t;
 typedef D3D12_VERTEX_BUFFER_VIEW			gfx_vert_buffer_view_t;
 typedef D3D12_INDEX_BUFFER_VIEW				gfx_index_buffer_view_t;
+typedef D3D12_RESOURCE_DESC					gfx_resource_desc_t;
+typedef D3D12_HEAP_DESC						gfx_heap_desc_t;
 typedef UINT64								uint64_t;
 typedef HANDLE								gfx_fence_event_t;
 
 typedef D3D12_VIEWPORT						gfx_viewport_t;
 typedef D3D12_RECT							gfx_rect_t;
+typedef D3D12_RESOURCE_STATES				gfx_resource_state_t;
 
 #endif 
