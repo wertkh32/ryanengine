@@ -10,3 +10,4 @@
 #define GFX_MSAA_TEXTURE_ALIGNMENT		( 4 * MB )
 #define GFX_BUFFER_ALIGNMENT			( 64 * KB )
 #define GFX_CONSTANT_BUFFER_MIN_SIZE	( 256U )
+#define GPU_PAGE_SIZE					( 64 * KB )

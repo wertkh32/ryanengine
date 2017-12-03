@@ -4,6 +4,7 @@
 #include "gfx_descheap.h"
 #include "gfx_constantbuffers.h"
 #include "gfx_math.h"
+#include "gfx_memmanager.h"
 
 
 struct GfxPerFrameData
@@ -340,6 +341,7 @@ struct GfxGameRenderer
 	gfx_viewport_t			gfxViewport;
 	gfx_rect_t				gfxScissorRect;
 
+	GfxMemManager			*memManager;
 
 	GfxGameRenderer()
 	{
@@ -400,6 +402,9 @@ struct GfxGameRenderer
 		InitDebugLayer ();
 
 		DXERROR ( gfxFactory->MakeWindowAssociation ( ctxHandle, DXGI_MWA_NO_ALT_ENTER ) );
+
+		memManager = GfxMemManager::Instance ();
+		memManager->Init ( gfxDevice );
 	}
 	
 

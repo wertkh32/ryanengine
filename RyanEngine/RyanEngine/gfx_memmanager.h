@@ -9,6 +9,8 @@
 #define TEXTURE_HEAP_SIZE ( 4 * MB )
 #define MEM_MAN_RESOURCE_ALIGNMENT ( 64 * KB ) // memory manager does not support multisampled texture for now
 
+sassert ( MEM_MAN_RESOURCE_ALIGNMENT == GPU_PAGE_SIZE );
+
 enum GFX_MEM_TYPE
 {
 	GFX_MEM_GPU_ONLY = 1U,
@@ -83,15 +85,15 @@ public:
 	
 	gfx_resource_t *allocateConstantBuffer ( uint size, gfx_resource_state_t state, uint memFlags );
 	
-	gfx_resource_t *allocateRawBuffer ( uint size, gfx_resource_state_t state, uint flags );
+	gfx_resource_t *allocateRawBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
 	
-	gfx_resource_t *allocateTypedBuffer ( uint size, gfx_resource_state_t state, uint flags );
+	gfx_resource_t *allocateTypedBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
 	
-	gfx_resource_t *allocateStructuredBuffer ( uint size, gfx_resource_state_t state, uint flags );
+	gfx_resource_t *allocateStructuredBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
 	
-	gfx_resource_t *allocateVertexBuffer ( uint size, gfx_resource_state_t state, uint flags );
+	gfx_resource_t *allocateVertexBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
 	
-	gfx_resource_t *allocateIndexBuffer ( uint size, gfx_resource_state_t state, uint flags );
+	gfx_resource_t *allocateIndexBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
 	
 	gfx_resource_t *allocateTexture2D ( uint width, uint height, gfx_resource_state_t state, GFX_RESOURCE_ACCESS access, 
 										GFX_TEXTURE_FORMAT format, uint mipLevels = 0 ); // mipLevels == 0 -> populate all mips
