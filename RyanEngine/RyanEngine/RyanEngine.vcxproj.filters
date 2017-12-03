@@ -22,6 +22,9 @@
     <Filter Include="math">
       <UniqueIdentifier>{ee9dbcb4-f184-4d91-b29e-eec652226d53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Containers">
+      <UniqueIdentifier>{7880789e-47ee-46a1-91a3-a6feefd765b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="universal.h">
@@ -89,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="gfx_memmanager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bitset.h">
+      <Filter>Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

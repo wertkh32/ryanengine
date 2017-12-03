@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="bitset.h" />
     <ClInclude Include="gfx_constantbuffers.h" />
     <ClInclude Include="gfx_descheap.h" />
     <ClInclude Include="feature.h" />
