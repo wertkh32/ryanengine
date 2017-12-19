@@ -11,39 +11,29 @@
 
 sassert ( MEM_MAN_RESOURCE_ALIGNMENT == GPU_PAGE_SIZE );
 
-enum GFX_MEM_TYPE
+enum GFX_RESOURCE_TYPE
 {
-	GFX_MEM_GPU_ONLY = 1U,
-	GFX_MEM_WRITE_COMBINE = 2U,
+	GFX_RESOURCE_GPU_ONLY = 0x1,
+	GFX_RESOURCE_WRITE_COMBINE = 0x2,
+	GFX_RESOURCE_UAV = 0x4, 
 
-	GFX_MEM_TYPE_COUNT = 2
+	GFX_MEM_TYPE_COUNT = 3
 };
 
-
-enum GFX_RESOURCE_ACCESS
-{
-	GFX_RESOURCE_READ_ONLY,
-	GFX_RESOURCE_READ_WRITE,
-
-	GFX_RESOURCE_ACCESS_COUNT
-};
+#define GPU_RESOURCE_INVALID_ACCESS_MASK ( GFX_RESOURCE_GPU_ONLY | GFX_RESOURCE_WRITE_COMBINE )
 
 sassert ( GFX_MEM_TYPE_COUNT < sizeof ( uint ) * 8 );
 
 
 // keeps track of all the resources created.
 // allows proper clean up when assets are unloaded.
-class GfxMemManager
+class GfxResourceManager
 {
 private:
-	uint totalMemoryUsed;
-	uint totalStaticResourceMem;
-	uint totalDynamicResourceMem;
+	gfx_device_t  *gfxDevice;
 
 	uint staticResourceCount;
 	uint dynamicResourceCount;
-
-	gfx_device_t  *gfxDevice;
 
 	gfx_heap_t	  *bufferHeap;
 	gfx_heap_t	  *uploadHeap;
@@ -56,13 +46,13 @@ private:
 	gfx_resource_t *staticResources[MAX_STATIC_RESOURCES];
 	gfx_resource_t *dynamicResources[MAX_DYNAMIC_RESOURCES];
 
-	GfxMemManager ();
+	GfxResourceManager ();
 	
-	~GfxMemManager ();
+	~GfxResourceManager ();
 
 	bool checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips );
 	
-	uint getResourceAllocSize ( gfx_resource_desc_t *resourceDesc )
+	uint getResourceAllocSize ( const gfx_resource_desc_t *resourceDesc )
 	{
 		D3D12_RESOURCE_ALLOCATION_INFO allocInfo = gfxDevice->GetResourceAllocationInfo ( 0, 1, resourceDesc );
 
@@ -72,31 +62,41 @@ private:
 	}
 
 public:
-	static GfxMemManager* Instance ()
+	static GfxResourceManager* Instance ()
 	{
-		static GfxMemManager* memMan = 0;
+		static GfxResourceManager* memMan = 0;
 		// instantiate only once... no more
 		if ( !memMan )
-			memMan = new GfxMemManager ();
+			memMan = new GfxResourceManager ();
 		return memMan;
 	}
 
 	void Init ( gfx_device_t *_gfxDevice );
-	
-	gfx_resource_t *allocateConstantBuffer ( uint size, gfx_resource_state_t state, uint memFlags );
-	
-	gfx_resource_t *allocateRawBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
-	
-	gfx_resource_t *allocateTypedBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
-	
-	gfx_resource_t *allocateStructuredBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
-	
-	gfx_resource_t *allocateVertexBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
-	
-	gfx_resource_t *allocateIndexBuffer ( uint size, gfx_resource_state_t state, uint memFlags, GFX_RESOURCE_ACCESS access );
-	
-	gfx_resource_t *allocateTexture2D ( uint width, uint height, gfx_resource_state_t state, GFX_RESOURCE_ACCESS access, 
+
+	gfx_resource_t *allocateBuffer ( const gfx_resource_desc_t *desc, gfx_resource_state_t state, uint memFlags );
+
+	gfx_resource_t *allocateTexture2D ( uint width, uint height, gfx_resource_state_t state, 
 										GFX_TEXTURE_FORMAT format, uint mipLevels = 0 ); // mipLevels == 0 -> populate all mips
+
+	void createConstantBuffer ( uint size, GfxConstantBuffer *constantBuffer, gfx_desc_handle_t descHandle );
+
+	void createRawBuffer ( uint size, GfxBuffer *buffer, uint resourceFlags, gfx_desc_handle_t descHandle );
+
+	void createTypedBuffer ( uint size, GfxBuffer *buffer, gfx_desc_handle_t descHandle );
+
+	void createStructuredBuffer ( uint size, GfxBuffer *buffer, gfx_desc_handle_t descHandle );
+
+	void createStaticVertexBuffer ( uint size, GfxVertBuffer *vertexBuffer );
+
+	void createStaticIndexBuffer ( uint size, GfxIndexBuffer *indexBuffer );
+
+	void createCPUGeneratedVertexBuffer ( uint size, GfxVertBuffer *vertexBuffer );
+
+	void createCPUGeneratedIndexBuffer ( uint size, GfxIndexBuffer *indexBuffer );
+
+	void createGPUGeneratedVertexBuffer ( uint size, GfxVertBuffer *vertexBuffer );
+
+	void createGPUGeneratedIndexBuffer ( uint size, GfxIndexBuffer *indexBuffer );
 
 	void deallocateAllDynamicResources (); // this is called when a scene is shutdown
 	

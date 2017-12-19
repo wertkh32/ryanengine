@@ -1,5 +1,6 @@
 #include "gfx_constantbuffers.h"
 
+
 void Gfx_CreateConstantBuffer( gfx_device_t *gfxDevice, gfx_cbuffer **cbuffer, gfx_desc_handle_t descHandle, uint size )
 {
 	uint alignedSize = NEAREST_MULTIPLE ( size, 256 );

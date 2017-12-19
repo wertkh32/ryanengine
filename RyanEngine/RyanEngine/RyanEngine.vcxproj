@@ -127,7 +127,7 @@
     <ClInclude Include="gfx_globals.h" />
     <ClInclude Include="gfx_material.h" />
     <ClInclude Include="gfx_math.h" />
-    <ClInclude Include="gfx_memmanager.h" />
+    <ClInclude Include="gfx_resourcemanager.h" />
     <ClInclude Include="gfx_state.h" />
     <ClInclude Include="gfx_types.h" />
     <ClInclude Include="gfx_unifiedvertexbuffer.h" />
@@ -147,7 +147,7 @@
     <ClCompile Include="gfx_backend.cpp" />
     <ClCompile Include="gfx_constantbuffers.cpp" />
     <ClCompile Include="gfx_material.cpp" />
-    <ClCompile Include="gfx_memmanager.cpp" />
+    <ClCompile Include="gfx_resourcemanager.cpp" />
     <ClCompile Include="gfx_state.cpp" />
     <ClCompile Include="gfx_unifiedvertexbuffer.h.cpp" />
     <ClCompile Include="quatn.cpp" />

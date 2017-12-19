@@ -21,8 +21,10 @@ struct GfxIndexBuffer
 };
 
 
-struct GfxConstantBuffer
+struct GfxBuffer
 {
 	gfx_resource_t *buffer;
 	byte *mappedPtr;
 };
+
+typedef GfxBuffer GfxConstantBuffer;

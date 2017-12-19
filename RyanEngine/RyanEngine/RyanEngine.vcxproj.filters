@@ -90,11 +90,11 @@
     <ClInclude Include="gfx_unifiedvertexbuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gfx_memmanager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bitset.h">
       <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_resourcemanager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +125,7 @@
     <ClCompile Include="gfx_unifiedvertexbuffer.h.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gfx_memmanager.cpp">
+    <ClCompile Include="gfx_resourcemanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
