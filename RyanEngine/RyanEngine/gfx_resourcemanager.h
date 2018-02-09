@@ -50,7 +50,7 @@ private:
 	
 	~GfxResourceManager ();
 
-	bool checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips );
+	// bool checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips );
 	
 	uint getResourceAllocSize ( const gfx_resource_desc_t *resourceDesc )
 	{
@@ -73,30 +73,10 @@ public:
 
 	void Init ( gfx_device_t *_gfxDevice );
 
-	gfx_resource_t *allocateBuffer ( const gfx_resource_desc_t *desc, gfx_resource_state_t state, uint memFlags );
+	gfx_resource_t *allocateBuffer ( const gfx_resource_desc_t *desc, uint resourceFlags );
 
 	gfx_resource_t *allocateTexture2D ( uint width, uint height, gfx_resource_state_t state, 
 										GFX_TEXTURE_FORMAT format, uint mipLevels = 0 ); // mipLevels == 0 -> populate all mips
-
-	void createConstantBuffer ( uint size, GfxConstantBuffer *constantBuffer, gfx_desc_handle_t descHandle );
-
-	void createRawBuffer ( uint size, GfxBuffer *buffer, uint resourceFlags, gfx_desc_handle_t descHandle );
-
-	void createTypedBuffer ( uint size, GfxBuffer *buffer, gfx_desc_handle_t descHandle );
-
-	void createStructuredBuffer ( uint size, GfxBuffer *buffer, gfx_desc_handle_t descHandle );
-
-	void createStaticVertexBuffer ( uint size, GfxVertBuffer *vertexBuffer );
-
-	void createStaticIndexBuffer ( uint size, GfxIndexBuffer *indexBuffer );
-
-	void createCPUGeneratedVertexBuffer ( uint size, GfxVertBuffer *vertexBuffer );
-
-	void createCPUGeneratedIndexBuffer ( uint size, GfxIndexBuffer *indexBuffer );
-
-	void createGPUGeneratedVertexBuffer ( uint size, GfxVertBuffer *vertexBuffer );
-
-	void createGPUGeneratedIndexBuffer ( uint size, GfxIndexBuffer *indexBuffer );
 
 	void deallocateAllDynamicResources (); // this is called when a scene is shutdown
 	
