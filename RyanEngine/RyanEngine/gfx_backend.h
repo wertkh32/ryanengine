@@ -399,6 +399,8 @@ struct GfxGameRenderer
 		gfxAdapter = Gfx_SelectAdapter ( gfxFactory );
 		gfxDevice = Gfx_CreateDevice ( gfxAdapter );
 
+		g_gfxDevice = gfxDevice;
+
 		InitDebugLayer ();
 
 		DXERROR ( gfxFactory->MakeWindowAssociation ( ctxHandle, DXGI_MWA_NO_ALT_ENTER ) );

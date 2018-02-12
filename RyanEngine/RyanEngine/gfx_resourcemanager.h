@@ -50,7 +50,7 @@ private:
 	
 	~GfxResourceManager ();
 
-	// bool checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips );
+	bool checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips );
 	
 	uint getResourceAllocSize ( const gfx_resource_desc_t *resourceDesc )
 	{

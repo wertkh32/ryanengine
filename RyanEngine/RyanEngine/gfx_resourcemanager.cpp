@@ -89,129 +89,34 @@ gfx_resource_t * GfxResourceManager::allocateBuffer ( const gfx_resource_desc_t 
 }
 
 
-//void GfxResourceManager::createConstantBuffer ( uint size, GfxConstantBuffer * constantBuffer, gfx_desc_handle_t descHandle )
-//{
-//	gfx_resource_t *cbuf_resource;
-//	byte *dataPtr;
-//	uint alignedSize = NEAREST_MULTIPLE ( size, 256 ); // constant buffers have to be aligned to 256
-//
-//	gfx_resource_desc_t bufferDesc = CD3DX12_RESOURCE_DESC::Buffer ( alignedSize );
-//
-//	cbuf_resource = allocateBuffer ( &bufferDesc, GFX_RESOURCE_WRITE_COMBINE );
-//
-//	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-//	cbvDesc.BufferLocation = cbuf_resource->GetGPUVirtualAddress ();
-//	cbvDesc.SizeInBytes = alignedSize;
-//
-//	gfxDevice->CreateConstantBufferView ( &cbvDesc, descHandle );
-//
-//	
-//	CD3DX12_RANGE readRange ( 0, 0 ); // ( begin <= end ) means not read by the cpu 
-//	cbuf_resource->Map ( 0, &readRange, reinterpret_cast< void** >(&dataPtr) );
-//	// use persistent map here, since heap type is upload only. Make sure cpu updates this before execute command lists is called.
-//	// pointer is to write-combine memory. Ensure cpu does not read this, not even accidentally.
-//
-//	constantBuffer->buffer = cbuf_resource;
-//	constantBuffer->mappedPtr = dataPtr;
-//}
+bool GfxResourceManager::checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips )
+{
+	
+	HRESULT hr;
+	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
 
+	D3D12_FEATURE_DATA_FORMAT_INFO formatInfo = { dxgiFormat };
 
-//void GfxResourceManager::createRawBuffer ( uint size, GfxBuffer *buffer, uint resourceFlags, gfx_desc_handle_t descHandle )
-//{
-//	gfx_resource_t *resource;
-//	byte *dataPtr = nullptr;
-//	uint accessFlags = 0;
-//	gfx_resource_state_t resourceState = D3D12_RESOURCE_STATE_COMMON;
-//
-//	bool isUAV = !!(resourceFlags & GFX_RESOURCE_UAV);
-//	bool isWriteCombine = !!(resourceFlags & GFX_RESOURCE_WRITE_COMBINE);
-//	bool isGPUOnly = !!(resourceFlags & GFX_RESOURCE_GPU_ONLY);
-//
-//	assert ( resourceFlags );
-//	assert ( !isWriteCombine || !isGPUOnly );
-//
-//	gfx_resource_desc_t bufferDesc = CD3DX12_RESOURCE_DESC::Buffer ( size );
-//
-//	if ( isUAV )
-//	{
-//		bufferDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-//		resourceState = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-//	}
-//
-//	if ( isWriteCombine )
-//	{
-//		accessFlags = GFX_RESOURCE_WRITE_COMBINE;
-//		resourceState = D3D12_RESOURCE_STATE_GENERIC_READ; // required for upload heaps // must override uav
-//	}
-//	else
-//		accessFlags = GFX_RESOURCE_GPU_ONLY;
-//
-//	resource = allocateBuffer ( &bufferDesc, accessFlags );
-//
-//	if( isUAV )
-//	{
-//		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
-//
-//		uavDesc.Format = DXGI_FORMAT_R32_TYPELESS; // required for raw buffers
-//		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
-//		uavDesc.Buffer.NumElements = size / 4;
-//		uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_RAW;
-//
-//		gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
-//	}
-//	else
-//	{
-//		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-//		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-//		srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // required for raw buffers
-//		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-//		srvDesc.Buffer.NumElements = size / 4;
-//		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW;
-//
-//		gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
-//	}
-//	
-//	if ( isWriteCombine )
-//	{
-//		CD3DX12_RANGE readRange ( 0, 0 ); // ( begin <= end ) means not read by the cpu 
-//		resource->Map ( 0, &readRange, reinterpret_cast< void** >(&dataPtr) );
-//		// use persistent map here, since heap type is upload only. Make sure cpu updates this before execute command lists is called.
-//		// pointer is to write-combine memory. Ensure cpu does not read this, not even accidentally.
-//	}
-//
-//	buffer->buffer = resource;
-//	buffer->mappedPtr = dataPtr;
-//}
+	hr = gfxDevice->CheckFeatureSupport ( D3D12_FEATURE_FORMAT_INFO, &formatInfo, sizeof ( formatInfo ) );
 
+	if ( hr != S_OK )
+		return false; // format not supported
 
-//bool GfxResourceManager::checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips )
-//{
-//	
-//	HRESULT hr;
-//	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
-//
-//	D3D12_FEATURE_DATA_FORMAT_INFO formatInfo = { dxgiFormat };
-//
-//	hr = gfxDevice->CheckFeatureSupport ( D3D12_FEATURE_FORMAT_INFO, &formatInfo, sizeof ( formatInfo ) );
-//
-//	if ( hr != S_OK )
-//		return false; // format not supported
-//
-//	if ( useMips ) // texture has mips
-//	{
-//		D3D12_FEATURE_DATA_FORMAT_SUPPORT formatSupport;
-//
-//		formatSupport.Format = dxgiFormat;
-//		formatSupport.Support1 = D3D12_FORMAT_SUPPORT1_MIP;
-//
-//		hr = gfxDevice->CheckFeatureSupport ( D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof ( formatSupport ) );
-//
-//		if ( hr != S_OK )
-//			return false; // mips not supported
-//	}
-//	
-//	return true;
-//}
+	if ( useMips ) // texture has mips
+	{
+		D3D12_FEATURE_DATA_FORMAT_SUPPORT formatSupport;
+
+		formatSupport.Format = dxgiFormat;
+		formatSupport.Support1 = D3D12_FORMAT_SUPPORT1_MIP;
+
+		hr = gfxDevice->CheckFeatureSupport ( D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof ( formatSupport ) );
+
+		if ( hr != S_OK )
+			return false; // mips not supported
+	}
+	
+	return true;
+}
 
 
 gfx_resource_t * GfxResourceManager::allocateTexture2D ( uint width, uint height, gfx_resource_state_t state, GFX_TEXTURE_FORMAT format, uint mipLevels )

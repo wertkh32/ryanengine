@@ -45,9 +45,6 @@
     <ClInclude Include="types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gfx_backend.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
     <ClInclude Include="vec4_math.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -63,29 +60,8 @@
     <ClInclude Include="math_macros.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="gfx_constantbuffers.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
-    <ClInclude Include="gfx_descheap.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
-    <ClInclude Include="gfx_globals.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
-    <ClInclude Include="gfx_dx12_types.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
     <ClInclude Include="quatn.h">
       <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="gfx_types.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
-    <ClInclude Include="gfx_state.h">
-      <Filter>gfx</Filter>
-    </ClInclude>
-    <ClInclude Include="gfx_material.h">
-      <Filter>gfx</Filter>
     </ClInclude>
     <ClInclude Include="gfx_unifiedvertexbuffer.h">
       <Filter>Header Files</Filter>
@@ -95,6 +71,36 @@
     </ClInclude>
     <ClInclude Include="gfx_resourcemanager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_backend.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_constantbuffers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_descheap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_dx12_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_gpubuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx_gputexture.h">
+      <Filter>gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="gfx_resourcemanager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_gpubuffer.cpp">
+      <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_gputexture.cpp">
+      <Filter>gfx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

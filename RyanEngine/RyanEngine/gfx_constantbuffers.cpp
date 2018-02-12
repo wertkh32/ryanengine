@@ -3,7 +3,7 @@
 
 void Gfx_CreateConstantBuffer( gfx_device_t *gfxDevice, gfx_cbuffer **cbuffer, gfx_desc_handle_t descHandle, uint size )
 {
-	uint alignedSize = NEAREST_MULTIPLE ( size, 256 );
+	uint alignedSize = ALIGN_UP ( size, 256 );
 
 	DXERROR( gfxDevice->CreateCommittedResource(
 			 &CD3DX12_HEAP_PROPERTIES( D3D12_HEAP_TYPE_UPLOAD ), // D3D12_HEAP_TYPE_UPLOAD = write combine memory, D3D12_HEAP_TYPE_READBACK == system coherent, D3D12_HEAP_TYPE_DEFAULT == gpu only, no cpu access
