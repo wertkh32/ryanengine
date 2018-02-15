@@ -62,7 +62,6 @@ gfx_resource_t * GfxResourceManager::allocateBuffer ( const gfx_resource_desc_t 
 {
 	bool isUAV = !!( resourceFlags & GFX_RESOURCE_UAV );
 	bool isWriteCombine = !!( resourceFlags & GFX_RESOURCE_WRITE_COMBINE );
-	bool isGPUOnly = !!( resourceFlags & GFX_RESOURCE_GPU_ONLY );
 
 	gfx_heap_t *heap = isWriteCombine ? uploadHeap : bufferHeap;
 	uint *heapOffset = isWriteCombine ? &uploadHeapOffset : &bufferHeapOffset;
@@ -89,56 +88,23 @@ gfx_resource_t * GfxResourceManager::allocateBuffer ( const gfx_resource_desc_t 
 }
 
 
-bool GfxResourceManager::checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips )
+gfx_resource_t * GfxResourceManager::allocateTexture ( const gfx_resource_desc_t *textureDesc, uint resourceFlags )
 {
-	
-	HRESULT hr;
-	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
-
-	D3D12_FEATURE_DATA_FORMAT_INFO formatInfo = { dxgiFormat };
-
-	hr = gfxDevice->CheckFeatureSupport ( D3D12_FEATURE_FORMAT_INFO, &formatInfo, sizeof ( formatInfo ) );
-
-	if ( hr != S_OK )
-		return false; // format not supported
-
-	if ( useMips ) // texture has mips
-	{
-		D3D12_FEATURE_DATA_FORMAT_SUPPORT formatSupport;
-
-		formatSupport.Format = dxgiFormat;
-		formatSupport.Support1 = D3D12_FORMAT_SUPPORT1_MIP;
-
-		hr = gfxDevice->CheckFeatureSupport ( D3D12_FEATURE_FORMAT_SUPPORT, &formatSupport, sizeof ( formatSupport ) );
-
-		if ( hr != S_OK )
-			return false; // mips not supported
-	}
-	
-	return true;
-}
-
-
-gfx_resource_t * GfxResourceManager::allocateTexture2D ( uint width, uint height, gfx_resource_state_t state, GFX_TEXTURE_FORMAT format, uint mipLevels )
-{
-	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
 	gfx_resource_t *texture = nullptr;
-
-	assert ( width <= MAX_TEXTURE_DIM && height <= MAX_TEXTURE_DIM );
-#if USE( GFX_RUNTIME_CHECKS )
-	assert ( checkTextureResourceValid ( format, ( mipLevels != 1 ) ) );
-#endif
-
-	gfx_resource_desc_t textureDesc = CD3DX12_RESOURCE_DESC::Tex2D ( dxgiFormat, width, height, 1, mipLevels );
+	bool isUAV = !!( resourceFlags & GFX_RESOURCE_UAV );
+	gfx_resource_state_t state = D3D12_RESOURCE_STATE_COPY_DEST;
 
 	assert ( gfxDevice );
 
-	DXERROR ( gfxDevice->CreatePlacedResource ( textureHeap, textureHeapOffset, &textureDesc, state, nullptr, IID_PPV_ARGS ( &texture ) ) );
+	if ( isUAV )
+		state = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+
+	DXERROR ( gfxDevice->CreatePlacedResource ( textureHeap, textureHeapOffset, textureDesc, state, nullptr, IID_PPV_ARGS ( &texture ) ) );
 
 	assert ( texture != nullptr );
 	assert ( staticResourceCount < MAX_STATIC_RESOURCES );
 
-	textureHeapOffset += getResourceAllocSize( &textureDesc );
+	textureHeapOffset += getResourceAllocSize( textureDesc );
 	staticResources[staticResourceCount++] = texture;
 
 	return texture;

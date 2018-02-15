@@ -13,11 +13,10 @@ sassert ( MEM_MAN_RESOURCE_ALIGNMENT == GPU_PAGE_SIZE );
 
 enum GFX_RESOURCE_TYPE
 {
-	GFX_RESOURCE_GPU_ONLY = 0x1,
-	GFX_RESOURCE_WRITE_COMBINE = 0x2,
-	GFX_RESOURCE_UAV = 0x4, 
+	GFX_RESOURCE_WRITE_COMBINE = 0x1,
+	GFX_RESOURCE_UAV = 0x2,
 
-	GFX_MEM_TYPE_COUNT = 3
+	GFX_MEM_TYPE_COUNT = 2
 };
 
 #define GPU_RESOURCE_INVALID_ACCESS_MASK ( GFX_RESOURCE_GPU_ONLY | GFX_RESOURCE_WRITE_COMBINE )
@@ -49,8 +48,6 @@ private:
 	GfxResourceManager ();
 	
 	~GfxResourceManager ();
-
-	bool checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips );
 	
 	uint getResourceAllocSize ( const gfx_resource_desc_t *resourceDesc )
 	{
@@ -75,8 +72,7 @@ public:
 
 	gfx_resource_t *allocateBuffer ( const gfx_resource_desc_t *desc, uint resourceFlags );
 
-	gfx_resource_t *allocateTexture2D ( uint width, uint height, gfx_resource_state_t state, 
-										GFX_TEXTURE_FORMAT format, uint mipLevels = 0 ); // mipLevels == 0 -> populate all mips
+	gfx_resource_t *allocateTexture ( const gfx_resource_desc_t *textureDesc, uint resourceFlags );
 
 	void deallocateAllDynamicResources (); // this is called when a scene is shutdown
 	
