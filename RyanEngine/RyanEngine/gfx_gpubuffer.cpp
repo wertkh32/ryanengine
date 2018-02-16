@@ -6,12 +6,15 @@ GfxGpuBuffer::GfxGpuBuffer ( uint _size, uint resourceFlags )
 	GfxResourceManager *resman ;
 	gfx_resource_desc_t desc;
 	bool isWriteCombine;
+	bool isUAV;
 
 	resman = GfxResourceManager::Instance ();
-	isWriteCombine = !!(resourceFlags & GFX_RESOURCE_WRITE_COMBINE);
+	isWriteCombine = !!( resourceFlags & GFX_RESOURCE_WRITE_COMBINE );
+	isUAV = !!( resourceFlags & GFX_RESOURCE_UAV );
 	bufferSize = _size;
+	isUAVAllowed = isUAV;
 
-	desc = CD3DX12_RESOURCE_DESC::Buffer ( bufferSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS, 0 );
+	desc = CD3DX12_RESOURCE_DESC::Buffer ( bufferSize, isUAV ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : D3D12_RESOURCE_FLAG_NONE, 0 );
 
 	resource = resman->allocateBuffer ( &desc, resourceFlags );
 
@@ -22,7 +25,6 @@ GfxGpuBuffer::GfxGpuBuffer ( uint _size, uint resourceFlags )
 		// use persistent map here, since heap type is upload only. Make sure cpu updates this before execute command lists is called.
 		// pointer is to write-combine memory. Ensure cpu does not read this, not even accidentally.
 	}
-
 }
 
 
@@ -52,7 +54,7 @@ void GfxGpuBuffer::CreateIndexBufferView ( gfx_index_buffer_view_t * outIBView, 
 }
 
 
-void GfxGpuBuffer::CreateRawBufferView ( gfx_desc_handle_t & descHandle, uint size )
+void GfxGpuBuffer::CreateRawBufferView ( gfx_desc_handle_t & descHandle, uint size, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( size <= bufferSize );
@@ -62,28 +64,31 @@ void GfxGpuBuffer::CreateRawBufferView ( gfx_desc_handle_t & descHandle, uint si
 	srvDesc.Format = DXGI_FORMAT_R32_TYPELESS; // required for raw buffers
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Buffer.NumElements = size / 4;
+	srvDesc.Buffer.FirstElement = firstElement;
 	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_RAW;
 
 	g_gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
 }
 
 
-void GfxGpuBuffer::CreateRawBufferUAV ( gfx_desc_handle_t & descHandle, uint size )
+void GfxGpuBuffer::CreateRawBufferUAV ( gfx_desc_handle_t & descHandle, uint size, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( size <= bufferSize );
+	assert ( isUAVAllowed );
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 	uavDesc.Format = DXGI_FORMAT_R32_TYPELESS; // required for raw buffers
 	uavDesc.Buffer.NumElements = size / 4;
+	uavDesc.Buffer.FirstElement = firstElement;
 	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_RAW;
 
 	g_gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
 }
 
 
-void GfxGpuBuffer::CreateStructuredBufferView ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements )
+void GfxGpuBuffer::CreateStructuredBufferView ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( sizeOfElement * numElements <= bufferSize );
@@ -94,16 +99,43 @@ void GfxGpuBuffer::CreateStructuredBufferView ( gfx_desc_handle_t & descHandle, 
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Buffer.NumElements = numElements;
 	srvDesc.Buffer.StructureByteStride = sizeOfElement;
+	srvDesc.Buffer.FirstElement = firstElement;
 	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 
 	g_gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
 }
 
 
-void GfxGpuBuffer::CreateStructuredBufferUAV ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements )
+void GfxGpuBuffer::CreateTypedBufferView ( gfx_desc_handle_t & descHandle, GFX_TBUFFER_FORMAT format, uint numElements, uint firstElement )
+{
+	uint elemSize;
+
+	assert ( g_gfxDevice );
+	
+	elemSize = Gfx_GetTypedBufferByteSize ( format );
+	
+	assert ( elemSize != 0 );
+	assert ( elemSize * numElements <= bufferSize );
+
+	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >( format );
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Format = dxgiFormat;
+	srvDesc.Buffer.NumElements = numElements;
+	srvDesc.Buffer.FirstElement = firstElement;
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+
+	g_gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
+}
+
+
+void GfxGpuBuffer::CreateStructuredBufferUAV ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( sizeOfElement * numElements <= bufferSize );
+	assert ( isUAVAllowed );
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
@@ -111,16 +143,19 @@ void GfxGpuBuffer::CreateStructuredBufferUAV ( gfx_desc_handle_t & descHandle, u
 	uavDesc.Buffer.CounterOffsetInBytes = 0;
 	uavDesc.Buffer.NumElements = numElements;
 	uavDesc.Buffer.StructureByteStride = sizeOfElement;
+	uavDesc.Buffer.FirstElement = firstElement;
 	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
 
 	g_gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
 }
 
-void GfxGpuBuffer::CreateStructuredBufferUAVWithCounter ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements, gfx_resource_t * counterBuffer, uint counterOffset )
+
+void GfxGpuBuffer::CreateStructuredBufferUAVWithCounter ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements, gfx_resource_t * counterBuffer, uint counterOffset, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( counterBuffer );
 	assert ( sizeOfElement * numElements <= bufferSize );
+	assert ( isUAVAllowed );
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
@@ -128,9 +163,34 @@ void GfxGpuBuffer::CreateStructuredBufferUAVWithCounter ( gfx_desc_handle_t & de
 	uavDesc.Buffer.CounterOffsetInBytes = counterOffset;
 	uavDesc.Buffer.NumElements = numElements;
 	uavDesc.Buffer.StructureByteStride = sizeOfElement;
+	uavDesc.Buffer.FirstElement = firstElement;
 	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
 
 	g_gfxDevice->CreateUnorderedAccessView ( resource, counterBuffer, &uavDesc, descHandle );
+}
+
+
+void GfxGpuBuffer::CreateTypedUAV ( gfx_desc_handle_t & descHandle, GFX_TBUFFER_FORMAT format, uint numElements, uint firstElement )
+{
+	uint elemSize;
+
+	assert ( g_gfxDevice );
+
+	elemSize = Gfx_GetTypedBufferByteSize ( format );
+
+	assert ( elemSize != 0 );
+	assert ( elemSize * numElements <= bufferSize );
+
+	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
+
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+	uavDesc.Format = dxgiFormat;
+	uavDesc.Buffer.NumElements = numElements;
+	uavDesc.Buffer.FirstElement = firstElement;
+	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
+
+	g_gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
 }
 
 

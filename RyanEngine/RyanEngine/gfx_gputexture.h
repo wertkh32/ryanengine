@@ -34,14 +34,22 @@ struct GfxGpuTexture
 {
 	gfx_resource_t *resource;
 	GfxTextureType type;
-	GFX_TEXTURE_FORMAT format;
+	GFX_FORMAT format;
+	uint width;
+	uint height;
+	uint depth;
+	uint mipLevels;
+	bool isUAVAllowed;
 
-	GfxGpuTexture ( uint width, uint height, uint depth, GFX_TEXTURE_FORMAT texFormat, uint mipLevels, uint resourceFlags, GfxTextureType texType );
+	GfxGpuTexture ( uint _width, uint _height, uint _depth, GFX_FORMAT _format, uint _mipLevels, uint _resourceFlags, GfxTextureType _type );
 
 	void CreateDefaultSRV ( gfx_desc_handle_t& descHandle );
-	void CreateDefaultUAV ( gfx_desc_handle_t& descHandle, uint mipLevel );
+	void CreateDefaultUAV ( gfx_desc_handle_t& descHandle );
+
+	void CreateCustomTex2DSRV ( gfx_desc_handle_t& descHandle, uint firstMip, uint numMips );
+	void CreateCustomTex2DUAV ( gfx_desc_handle_t& descHandle, uint mipSlice );
 
 
-	bool checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips );
+	bool checkTextureResourceValid ( GFX_FORMAT format, bool useMips );
 	~GfxGpuTexture ();
 };

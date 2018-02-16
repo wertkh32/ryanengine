@@ -1,21 +1,26 @@
 #include "gfx_gputexture.h"
 
-GfxGpuTexture::GfxGpuTexture ( uint width, uint height, uint depth, GFX_TEXTURE_FORMAT texFormat, uint mipLevels, uint resourceFlags, GfxTextureType texType )
+GfxGpuTexture::GfxGpuTexture ( uint _width, uint _height, uint _depth, GFX_FORMAT _format, uint _mipLevels, uint _resourceFlags, GfxTextureType _type )
 {
 	GfxResourceManager *resman = GfxResourceManager::Instance ();
-	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(texFormat);
-	bool isUAV = !!(resourceFlags & GFX_RESOURCE_UAV);
+	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >( _format );
+	bool isUAV = !!( _resourceFlags & GFX_RESOURCE_UAV );
 	
 	gfx_resource_desc_t textureDesc;
 
-#if USE( GFX_RUNTIME_CHECKS )
-	checkTextureResourceValid ( texFormat, (mipLevels != 1) );
-#endif
-
 	assert ( width <= MAX_TEXTURE_DIM && height <= MAX_TEXTURE_DIM );
 
-	type = texType;
-	format = texFormat;
+	type = _type;
+	format = _format;
+	width = _width;
+	height = _height;
+	depth = _depth;
+	mipLevels = _mipLevels;
+	isUAVAllowed = isUAV;
+
+#if USE( GFX_RUNTIME_CHECKS )
+	checkTextureResourceValid ( format, ( mipLevels != 1 ) );
+#endif
 
 	switch ( type )
 	{
@@ -33,37 +38,69 @@ GfxGpuTexture::GfxGpuTexture ( uint width, uint height, uint depth, GFX_TEXTURE_
 	if ( isUAV )
 		textureDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
 
-	resource = resman->allocateTexture ( &textureDesc, resourceFlags );
+	resource = resman->allocateTexture ( &textureDesc, _resourceFlags );
 }
 
 void GfxGpuTexture::CreateDefaultSRV ( gfx_desc_handle_t & descHandle )
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
-	D3D12_SRV_DIMENSION dimension = s_defaultSRVDimensions[type];
 	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
 
-	srvDesc.ViewDimension = dimension;
-	
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	switch ( type )
+	{
+		case GFX_TEXTURE_2D:
+			// all mips
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+			srvDesc.Texture2D.MipLevels = -1;
+			break;
+		case GFX_TEXTURE_2D_ARRAY:
+			// all mips, all depth
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+			srvDesc.Texture2DArray.MipLevels = -1;
+			srvDesc.Texture2DArray.ArraySize = depth;
+			break;
+		case GFX_TEXTURE_3D:
+			// all mips
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
+			srvDesc.Texture3D.MipLevels = -1;
+			break;
+	}
+
+	g_gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
+}
+
+void GfxGpuTexture::CreateDefaultUAV ( gfx_desc_handle_t & descHandle )
+{
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+
+	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
+
 	switch ( type )
 	{
 	case GFX_TEXTURE_2D:
-		srvDesc.Texture2D.MipLevels = -1;
-		srvDesc.Texture2D.MostDetailedMip = 0;
+		// first mip
+		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 		break;
 	case GFX_TEXTURE_2D_ARRAY:
-		
+		// first mip, all slices
+		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
+		uavDesc.Texture2DArray.ArraySize = depth;
 		break;
 	case GFX_TEXTURE_3D:
-		
+		// first mip, all slices
+		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE3D;
+		uavDesc.Texture3D.WSize = depth;
 		break;
 	}
 
-	
+	g_gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
 }
 
 
-bool GfxGpuTexture::checkTextureResourceValid ( GFX_TEXTURE_FORMAT format, bool useMips )
+bool GfxGpuTexture::checkTextureResourceValid ( GFX_FORMAT format, bool useMips )
 {
 
 	HRESULT hr;
