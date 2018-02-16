@@ -25,9 +25,11 @@ GfxGpuTexture::GfxGpuTexture ( uint _width, uint _height, uint _depth, GFX_FORMA
 	switch ( type )
 	{
 		case GFX_TEXTURE_2D:
+		case GFX_TEXTURE_2D_CUBEMAP:
 			textureDesc = CD3DX12_RESOURCE_DESC::Tex2D ( dxgiFormat, width, height, 1, mipLevels );
 			break;
 		case GFX_TEXTURE_2D_ARRAY:
+		case GFX_TEXTURE_2D_CUBEMAP_ARRAY:
 			textureDesc = CD3DX12_RESOURCE_DESC::Tex2D ( dxgiFormat, width, height, depth, mipLevels );
 			break;
 		case GFX_TEXTURE_3D:
@@ -62,6 +64,15 @@ void GfxGpuTexture::CreateDefaultSRV ( gfx_desc_handle_t & descHandle )
 			srvDesc.Texture2DArray.MipLevels = -1;
 			srvDesc.Texture2DArray.ArraySize = depth;
 			break;
+		case GFX_TEXTURE_2D_CUBEMAP:
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+			srvDesc.TextureCube.MipLevels = -1;
+			break;
+		case GFX_TEXTURE_2D_CUBEMAP_ARRAY:
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
+			srvDesc.TextureCubeArray.MipLevels = -1;
+			srvDesc.TextureCubeArray.NumCubes = depth / 6U;
+			break;
 		case GFX_TEXTURE_3D:
 			// all mips
 			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
@@ -81,10 +92,12 @@ void GfxGpuTexture::CreateDefaultUAV ( gfx_desc_handle_t & descHandle )
 	switch ( type )
 	{
 	case GFX_TEXTURE_2D:
+	case GFX_TEXTURE_2D_CUBEMAP:
 		// first mip
 		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 		break;
 	case GFX_TEXTURE_2D_ARRAY:
+	case GFX_TEXTURE_2D_CUBEMAP_ARRAY:
 		// first mip, all slices
 		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
 		uavDesc.Texture2DArray.ArraySize = depth;
