@@ -25,6 +25,9 @@
     <Filter Include="Containers">
       <UniqueIdentifier>{7880789e-47ee-46a1-91a3-a6feefd765b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{d5241122-b7ed-4245-a7eb-1e0396388949}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="universal.h">
@@ -99,8 +102,20 @@
     <ClInclude Include="gfx_gpubuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gfx_textureloader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="gfx_gputexture.h">
-      <Filter>gfx</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="memory_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="asset_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="asset_structs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,17 +143,26 @@
     <ClCompile Include="gfx_material.cpp">
       <Filter>gfx</Filter>
     </ClCompile>
-    <ClCompile Include="gfx_unifiedvertexbuffer.h.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gfx_resourcemanager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gfx_gpubuffer.cpp">
       <Filter>gfx</Filter>
     </ClCompile>
     <ClCompile Include="gfx_gputexture.cpp">
       <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_resourcemanager.cpp">
+      <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_textureloader.cpp">
+      <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx_unifiedvertexbuffer.h.cpp">
+      <Filter>gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="memory_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="asset_manager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

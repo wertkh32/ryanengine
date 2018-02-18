@@ -116,6 +116,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="asset_manager.h" />
+    <ClInclude Include="asset_structs.h" />
     <ClInclude Include="bitset.h" />
     <ClInclude Include="gfx_constantbuffers.h" />
     <ClInclude Include="gfx_descheap.h" />
@@ -131,10 +133,12 @@
     <ClInclude Include="gfx_math.h" />
     <ClInclude Include="gfx_resourcemanager.h" />
     <ClInclude Include="gfx_state.h" />
+    <ClInclude Include="gfx_textureloader.h" />
     <ClInclude Include="gfx_types.h" />
     <ClInclude Include="gfx_unifiedvertexbuffer.h" />
     <ClInclude Include="mat4x4_math.h" />
     <ClInclude Include="math_macros.h" />
+    <ClInclude Include="memory_manager.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="quatn.h" />
     <ClInclude Include="types.h" />
@@ -143,6 +147,7 @@
     <ClInclude Include="vec4_math.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="asset_manager.cpp" />
     <ClCompile Include="game_engine.cpp" />
     <ClCompile Include="game_init_win32.cpp" />
     <ClCompile Include="game_main.cpp" />
@@ -153,7 +158,9 @@
     <ClCompile Include="gfx_material.cpp" />
     <ClCompile Include="gfx_resourcemanager.cpp" />
     <ClCompile Include="gfx_state.cpp" />
+    <ClCompile Include="gfx_textureloader.cpp" />
     <ClCompile Include="gfx_unifiedvertexbuffer.h.cpp" />
+    <ClCompile Include="memory_manager.cpp" />
     <ClCompile Include="quatn.cpp" />
   </ItemGroup>
   <ItemGroup>

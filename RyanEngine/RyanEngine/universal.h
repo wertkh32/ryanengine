@@ -37,3 +37,18 @@ enum DISPLAY_RESOLUTIONS
 #define MB ( KB * KB )
 
 // CPU side matrices are row major. GPU side matrices are column major
+
+// add CRIP classes here
+template<class T>
+class Singleton
+{
+public:
+	static T* Instance ()
+	{
+		static T* instance = 0;
+		// instantiate only once... no more
+		if ( !instance )
+			instance = new T ();
+		return instance;
+	}
+};

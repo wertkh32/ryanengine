@@ -26,8 +26,9 @@ sassert ( GFX_MEM_TYPE_COUNT < sizeof ( uint ) * 8 );
 
 // keeps track of all the resources created.
 // allows proper clean up when assets are unloaded.
-class GfxResourceManager
+class GfxResourceManager : public Singleton<GfxResourceManager>
 {
+	friend Singleton<GfxResourceManager>;
 private:
 	gfx_device_t  *gfxDevice;
 
@@ -44,10 +45,6 @@ private:
 
 	gfx_resource_t *staticResources[MAX_STATIC_RESOURCES];
 	gfx_resource_t *dynamicResources[MAX_DYNAMIC_RESOURCES];
-
-	GfxResourceManager ();
-	
-	~GfxResourceManager ();
 	
 	uint getResourceAllocSize ( const gfx_resource_desc_t *resourceDesc )
 	{
@@ -58,15 +55,17 @@ private:
 		return static_cast< uint >( allocInfo.SizeInBytes );
 	}
 
+	GfxResourceManager ();
+	~GfxResourceManager ();
 public:
-	static GfxResourceManager* Instance ()
-	{
-		static GfxResourceManager* memMan = 0;
-		// instantiate only once... no more
-		if ( !memMan )
-			memMan = new GfxResourceManager ();
-		return memMan;
-	}
+	//static GfxResourceManager* Instance ()
+	//{
+	//	static GfxResourceManager* memMan = 0;
+	//	// instantiate only once... no more
+	//	if ( !memMan )
+	//		memMan = new GfxResourceManager ();
+	//	return memMan;
+	//}
 
 	void Init ( gfx_device_t *_gfxDevice );
 
