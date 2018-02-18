@@ -31,7 +31,7 @@ struct GfxGpuTexture
 	void CreateDefaultSRV ( gfx_desc_handle_t& descHandle );
 	void CreateDefaultUAV ( gfx_desc_handle_t& descHandle );
 
-	void CreateCustomTex2DSRV ( gfx_desc_handle_t& descHandle, uint firstMip, uint numMips );
+	void CreateCustomTex2DSRV ( gfx_desc_handle_t& descHandle, uint firstMip, uint numMips, float minLODClamp );
 	void CreateCustomTex2DUAV ( gfx_desc_handle_t& descHandle, uint mipSlice );
 
 

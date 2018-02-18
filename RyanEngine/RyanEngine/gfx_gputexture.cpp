@@ -112,6 +112,34 @@ void GfxGpuTexture::CreateDefaultUAV ( gfx_desc_handle_t & descHandle )
 	g_gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
 }
 
+void GfxGpuTexture::CreateCustomTex2DSRV ( gfx_desc_handle_t & descHandle, uint firstMip, uint numMips, float minLODClamp )
+{
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+
+	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
+
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = firstMip;
+	srvDesc.Texture2D.MipLevels = numMips;
+	srvDesc.Texture2D.ResourceMinLODClamp = minLODClamp;
+
+	g_gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
+}
+
+void GfxGpuTexture::CreateCustomTex2DUAV ( gfx_desc_handle_t & descHandle, uint mipSlice )
+{
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+
+	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >(format);
+	
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+	uavDesc.Texture2D.MipSlice = mipSlice;
+
+	g_gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
+}
+
 
 bool GfxGpuTexture::checkTextureResourceValid ( GFX_FORMAT format, bool useMips )
 {
