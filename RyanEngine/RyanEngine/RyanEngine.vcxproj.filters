@@ -117,6 +117,9 @@
     <ClInclude Include="asset_structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="intrinsics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_main.cpp">

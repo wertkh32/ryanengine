@@ -58,15 +58,6 @@ private:
 	GfxResourceManager ();
 	~GfxResourceManager ();
 public:
-	//static GfxResourceManager* Instance ()
-	//{
-	//	static GfxResourceManager* memMan = 0;
-	//	// instantiate only once... no more
-	//	if ( !memMan )
-	//		memMan = new GfxResourceManager ();
-	//	return memMan;
-	//}
-
 	void Init ( gfx_device_t *_gfxDevice );
 
 	gfx_resource_t *allocateBuffer ( const gfx_resource_desc_t *desc, uint resourceFlags );

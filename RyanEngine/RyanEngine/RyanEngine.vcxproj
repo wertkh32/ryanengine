@@ -88,6 +88,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -136,6 +140,7 @@
     <ClInclude Include="gfx_textureloader.h" />
     <ClInclude Include="gfx_types.h" />
     <ClInclude Include="gfx_unifiedvertexbuffer.h" />
+    <ClInclude Include="intrinsics.h" />
     <ClInclude Include="mat4x4_math.h" />
     <ClInclude Include="math_macros.h" />
     <ClInclude Include="memory_manager.h" />

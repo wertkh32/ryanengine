@@ -10,10 +10,11 @@
 #include <math.h>
 #include <string>
 #include <assert.h>
+#include <intrin.h>
 #include <xmmintrin.h>
 #include <smmintrin.h>
 #include "math_macros.h"
-
+#include "intrinsics.h"
 
 enum DISPLAY_RESOLUTIONS
 {
