@@ -5,16 +5,14 @@
 #define DWORD_INDEX_MASK ( ~( DWORD_MASK ) )
 #define DWORD_SHIFT ( 5U )
 
-struct bitset
+template< uint numBits >
+struct BitSet
 {
-	uint *bitArray;
-	uint numDWords;
+	const uint numDWords = ( numBits + DWORD_MASK ) >> DWORD_SHIFT;
+	uint bitArray[numDWords];
 
-	bitset ( uint *_bitArray, uint _numDWords )
+	BitSet ()
 	{
-		bitArray = _bitArray;
-		numDWords = _numDWords;
-
 		clear ();
 	}
 

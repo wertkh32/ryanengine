@@ -108,17 +108,17 @@
     <ClInclude Include="gfx_gputexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="memory_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="asset_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="asset_structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="memory_manager.h">
+      <Filter>system</Filter>
+    </ClInclude>
     <ClInclude Include="intrinsics.h">
-      <Filter>Header Files</Filter>
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +165,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="asset_manager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

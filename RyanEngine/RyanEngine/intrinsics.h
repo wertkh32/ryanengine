@@ -33,13 +33,13 @@ inline uint CountBits32 ( uint value )
 }
 
 
-#if IS_X64
 inline bool TestBit32 ( uint value, uint bitPos )
 {
 	return !!( _bittest ( reinterpret_cast< long* >( &value ), bitPos ));
 }
 
 
+#if IS_X64
 inline uint CountLeadingZeros64 ( uint64 value )
 {
 	ulong index;
