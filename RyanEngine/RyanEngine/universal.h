@@ -32,6 +32,10 @@ enum DISPLAY_RESOLUTIONS
 
 #define ALIGN( x ) __declspec( align( x ) )
 #define ALIGN_UP( x, n ) ( ( (x) + ( (n) - 1 ) ) & ~( (n) - 1 ) )
+#define IS_ALIGNED( x, n ) ( ( (x) & ( (n) - 1) ) == 0 )
+#define IS_ALIGNED_PTR( x, n ) ( ( reinterpret_cast<uintptr_t>(x) & ( (n) - 1) ) == 0 )
+#define NUM_BLOCKS( x, n ) ( ( (x) + ( (n) - 1 ) ) / (n) )
+#define IS_POWER_2( x ) ( ( (x) & ( (x) - 1 ) ) == 0 )
 #define sassert( x ) static_assert( ( x ), #x )
 
 #define KB ( 1024U )

@@ -122,7 +122,10 @@
   <ItemGroup>
     <ClInclude Include="asset_manager.h" />
     <ClInclude Include="asset_structs.h" />
+    <ClInclude Include="bititerator.h" />
     <ClInclude Include="bitset.h" />
+    <ClInclude Include="bittrees.h" />
+    <ClInclude Include="stackarray.h" />
     <ClInclude Include="gfx_constantbuffers.h" />
     <ClInclude Include="gfx_descheap.h" />
     <ClInclude Include="feature.h" />
