@@ -463,6 +463,8 @@ struct GfxGameRenderer
 
 		DXERROR ( D3DCompileFromFile ( L"C:\\Users\\wert\\Desktop\\RyanAndFriends\\RyanEngine\\RyanEngine\\Shaders\\shaders.hlsl", nullptr, nullptr, "vsmain", "vs_5_0", compileFlags, 0, &defaultVertexShader, &vsErrors ) );
 		
+		//assert ( defaultVertexShader );
+
 		if ( vsErrors )
 		{
 			const char *errorMsg = (const char*)vsErrors->GetBufferPointer ();
@@ -470,6 +472,8 @@ struct GfxGameRenderer
 		}
 
 		DXERROR ( D3DCompileFromFile ( L"C:\\Users\\wert\\Desktop\\RyanAndFriends\\RyanEngine\\RyanEngine\\Shaders\\shaders.hlsl", nullptr, nullptr, "psmain", "ps_5_0", compileFlags, 0, &defaultPixelShader, &psErrors ) );
+
+		assert ( defaultPixelShader );
 
 		if ( psErrors )
 		{

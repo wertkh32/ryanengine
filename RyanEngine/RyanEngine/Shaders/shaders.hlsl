@@ -9,6 +9,7 @@ struct PSInput
 {
 	float4 position : SV_POSITION;
 	float4 color : COLOR;
+//	uint pid : SV_PrimitiveID;
 };
 
 PSInput vsmain(float3 position : POSITION, float4 color : COLOR )
@@ -22,9 +23,9 @@ PSInput vsmain(float3 position : POSITION, float4 color : COLOR )
 }
 
 
-float4 psmain(PSInput input) : SV_TARGET
+float4 psmain(PSInput input, uint pid : SV_PrimitiveID ) : SV_TARGET
 {
-	return input.color;
+	return input.color * pid;
 }
 
 

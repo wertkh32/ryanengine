@@ -1,6 +1,7 @@
 #pragma once
 #include "universal.h"
 #include "stackarray.h"
+#include "bitset.h"
 
 #define MEMORY_PAGE_SIZE			( 64U * KB )
 #define STATIC_MEMORY_SIZE			( 64U * MB )
@@ -78,11 +79,56 @@ struct MemSimpleAllocator
 };
 
 
+struct BuddyBlock
+{
+	uint offset;
+	uint size;
+};
+
 // for dynamic allocation
+// numPages must be power of 2
+
+
 template < uint numPages >
 struct MemBuddyAllocator
 {
+	static const uint DEPTH = COUNT_TRAILING_ZEROS_CONST( numPages ) + 1;
+	static const uint NUM_BUDDY_NODES = ( numPages * 2 - 1 );
 
+	Stack<BuddyBlock> freeBlocks[DEPTH];
+	BuddyBlock nodeArray[NUM_BUDDY_NODES];
+	BitSet<numPages> freeBlockBits;
+	byte *memPtr;
+
+	void init ( byte *ptr )
+	{
+		BuddyBlock firstNode;
+
+		memPtr = ptr;
+
+		assert ( IS_POWER_2 ( numPages ) );
+
+		for ( uint i = 0; i < DEPTH; i++ )
+		{
+			uint nodeOffset;
+
+			nodeOffset = i == 0 ? 0 : ( i * 2 - 1 );
+			freeBlocks[i] = Stack<BuddyBlock> ( nodeArray + nodeOffset, 1 << i );
+		}
+
+		firstNode.offset = 0;
+		firstNode.size = numPages;
+
+		freeBlocks[0].push ( firstNode );
+
+		freeBlockBits.setAll ();
+	}
+
+
+	byte *alloc ( uint sizeInBytes )
+	{
+		uint numPages = NUM_BLOCKS ( sizeInBytes, MEMORY_PAGE_SIZE );
+	}
 };
 
 
