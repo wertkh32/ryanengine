@@ -15,7 +15,12 @@
 #define _MAIN_			WinMain
 #define _ENTRY_ARGS_	HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, int nCmdShow
 
-#endif // #if USE( WIN32 )
+typedef HWND ctx_handle_t;
+typedef LPWSTR _WCHARSTR_;
+
+typedef float	float_t;
+
+#endif // #if USE( PLATFORM_WIN32 )
 
 #if USE( DX12_API )
 
@@ -34,3 +39,4 @@
 #define GFX_DSV_ELEMENT_SIZE	4 // 32 bits. update this when GFX_DEPTH_STENCIL_FORMAT changes
 
 #endif //#if USE( DX12_API )
+

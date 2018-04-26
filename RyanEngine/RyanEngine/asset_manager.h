@@ -2,22 +2,6 @@
 #include "universal.h"
 #include "asset_structs.h"
 
-enum ASSET_TYPE
-{
-	ASSET_TYPE_MODEL,
-	ASSET_TYPE_SHADER,
-	ASSET_TYPE_TEXTURE,
-
-	ASSET_TYPE_COUNT,
-};
-
-enum ASSET_POOL_SIZE : uint
-{
-	ASSET_POOL_MODEL_SIZE = 256,
-	ASSET_POOL_SHADER_SIZE = 256,
-	ASSET_POOL_TEXTURE_SIZE = 256,
-};
-
 
 const uint g_assetPoolSize[] =
 {

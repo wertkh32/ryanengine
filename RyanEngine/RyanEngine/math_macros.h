@@ -1,5 +1,4 @@
 #pragma once
-
 #include "universal.h"
 
 #define MIN( x, y )  ( (x) < (y) ? (x) : (y) )
@@ -11,11 +10,25 @@
 
 constexpr uint COUNT_LEADING_ZEROS_CONST ( uint n )
 {
-	return ((n & 0x80000000) == 0x80000000) ? 0 : COUNT_LEADING_ZEROS_CONST ( n << 1 ) + 1;
+	return (n == 0) ? 32 :
+		((n & 0x80000000U) ? 0 : (COUNT_LEADING_ZEROS_CONST ( n << 1 ) + 1));
 }
 
 
 constexpr uint COUNT_TRAILING_ZEROS_CONST ( uint n )
 {
-	return ( ( n & 1 ) == 1 ) ? 0 : COUNT_TRAILING_ZEROS_CONST( n >> 1 ) + 1;
+	return (n == 0) ? 32 :
+		((n & 1) ? 0 : (COUNT_TRAILING_ZEROS_CONST ( n >> 1 ) + 1));
+}
+
+
+constexpr uint COUNT_LEADING_ONES_CONST ( uint n )
+{
+	return COUNT_LEADING_ZEROS_CONST ( ~n );
+}
+
+
+constexpr uint COUNT_TRAILING_ONES_CONST ( uint n )
+{
+	return COUNT_TRAILING_ZEROS_CONST ( ~n );
 }

@@ -122,14 +122,14 @@ struct LinkedList
 	}
 
 
-	LinkedListNode<T> *insert ( const T& data )
+	LinkedListNode<T> *insert ( const T& data ) // grabs node from start of free list and puts it at end of used list
 	{
 		if ( freeListIsEmpty () )
 			return nullptr;
 
 		LinkedListNode<T> *newNode;
 
-		newNode = freeSentry.prev;
+		newNode = freeSentry.next;
 		newNode->data = data;
 
 		addNodeToUsedList ( newNode );

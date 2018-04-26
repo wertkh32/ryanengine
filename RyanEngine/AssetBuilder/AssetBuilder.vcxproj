@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,36 +19,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F4016C6B-E602-4705-AAE4-F6E62F53D3A8}</ProjectGuid>
-    <RootNamespace>RyanEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{3D39A73B-C653-4194-8EFD-0EC16D43CC3A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>AssetBuilder</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -69,115 +71,98 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>../RyanEngine;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;ASSET_BUILDER;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;ASSET_BUILDER;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="asset_manager.h" />
-    <ClInclude Include="asset_structs.h" />
-    <ClInclude Include="bititerator.h" />
-    <ClInclude Include="bitset.h" />
-    <ClInclude Include="bittrees.h" />
-    <ClInclude Include="freelist.h" />
-    <ClInclude Include="linkedlist.h" />
-    <ClInclude Include="sortedqueue.h" />
-    <ClInclude Include="stackarray.h" />
-    <ClInclude Include="gfx_constantbuffers.h" />
-    <ClInclude Include="gfx_descheap.h" />
-    <ClInclude Include="feature.h" />
-    <ClInclude Include="game_engine.h" />
-    <ClInclude Include="game_init_win32.h" />
-    <ClInclude Include="gfx_backend.h" />
-    <ClInclude Include="gfx_dx12_types.h" />
-    <ClInclude Include="gfx_globals.h" />
-    <ClInclude Include="gfx_gpubuffer.h" />
-    <ClInclude Include="gfx_gputexture.h" />
-    <ClInclude Include="gfx_material.h" />
-    <ClInclude Include="gfx_math.h" />
-    <ClInclude Include="gfx_resourcemanager.h" />
-    <ClInclude Include="gfx_state.h" />
-    <ClInclude Include="gfx_textureloader.h" />
-    <ClInclude Include="gfx_types.h" />
-    <ClInclude Include="gfx_unifiedvertexbuffer.h" />
-    <ClInclude Include="intrinsics.h" />
-    <ClInclude Include="mat4x4_math.h" />
-    <ClInclude Include="math_macros.h" />
-    <ClInclude Include="memory_manager.h" />
-    <ClInclude Include="platform.h" />
-    <ClInclude Include="quatn.h" />
-    <ClInclude Include="types.h" />
-    <ClInclude Include="universal.h" />
-    <ClInclude Include="vec3_math.h" />
-    <ClInclude Include="vec4_math.h" />
+    <ClCompile Include="AssetBuilder.cpp" />
+    <ClCompile Include="AssetFile.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="asset_manager.cpp" />
-    <ClCompile Include="game_engine.cpp" />
-    <ClCompile Include="game_init_win32.cpp" />
-    <ClCompile Include="game_main.cpp" />
-    <ClCompile Include="gfx_backend.cpp" />
-    <ClCompile Include="gfx_constantbuffers.cpp" />
-    <ClCompile Include="gfx_gpubuffer.cpp" />
-    <ClCompile Include="gfx_gputexture.cpp" />
-    <ClCompile Include="gfx_material.cpp" />
-    <ClCompile Include="gfx_resourcemanager.cpp" />
-    <ClCompile Include="gfx_state.cpp" />
-    <ClCompile Include="gfx_textureloader.cpp" />
-    <ClCompile Include="gfx_unifiedvertexbuffer.h.cpp" />
-    <ClCompile Include="memory_manager.cpp" />
-    <ClCompile Include="quatn.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\shaders.hlsl">
-      <FileType>Document</FileType>
-    </None>
+    <ClInclude Include="..\RyanEngine\asset_structs.h" />
+    <ClInclude Include="..\RyanEngine\feature.h" />
+    <ClInclude Include="..\RyanEngine\intrinsics.h" />
+    <ClInclude Include="..\RyanEngine\math_macros.h" />
+    <ClInclude Include="..\RyanEngine\types.h" />
+    <ClInclude Include="..\RyanEngine\universal.h" />
+    <ClInclude Include="AssetFile.h" />
+    <ClInclude Include="ImageLoader.h" />
+    <ClInclude Include="stb_dxt.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

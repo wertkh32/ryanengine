@@ -4,9 +4,10 @@
 #define IN_USE 7
 #define NOT_IN_USE 3
 #define USE( x )	( ( IN_USE / ( x ) ) == 1 )
+#define USE_IF( x )	( ( x ) * ( IN_USE - NOT_IN_USE ) + NOT_IN_USE )
 
 #define PLATFORM_WIN32		IN_USE
-#define DX12_API			IN_USE
+#define DX12_API			USE_IF( !defined( ASSET_BUILDER ) )
 #define DEBUG_LAYER			IN_USE
 #define GFX_RUNTIME_CHECKS	IN_USE
 

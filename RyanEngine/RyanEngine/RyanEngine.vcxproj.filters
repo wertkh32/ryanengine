@@ -129,6 +129,15 @@
     <ClInclude Include="bittrees.h">
       <Filter>Containers</Filter>
     </ClInclude>
+    <ClInclude Include="linkedlist.h">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="sortedqueue.h">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="freelist.h">
+      <Filter>Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_main.cpp">

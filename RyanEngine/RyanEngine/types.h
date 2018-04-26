@@ -1,5 +1,6 @@
 #pragma once
-#include "universal.h"
+#include "feature.h"
+#include <stdint.h>
 
 typedef unsigned int	uint;
 typedef unsigned char	uchar;
@@ -19,6 +20,7 @@ typedef volatile int64 v_int64;
 typedef float float2[2];
 typedef float float3[3];
 typedef float float4[4];
+
 
 #define VERTEXPOS			float3 pos;
 
@@ -42,12 +44,3 @@ struct VertexPosColNorm
 {
 	VERTEXPOSCOLNORM
 };
-
-#if USE( PLATFORM_WIN32 )
-
-typedef HWND ctx_handle_t;
-typedef LPWSTR _WCHARSTR_;
-
-typedef float	float_t;
-
-#endif //#if USE( PLATFORM_WIN32 )
