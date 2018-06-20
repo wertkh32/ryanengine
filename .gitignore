@@ -281,3 +281,9 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+*.tga
+*.tif
+*.max
+*.mtl
+*.db
+*.exp

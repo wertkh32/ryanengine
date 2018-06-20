@@ -126,6 +126,7 @@
     <ClInclude Include="bitset.h" />
     <ClInclude Include="bittrees.h" />
     <ClInclude Include="freelist.h" />
+    <ClInclude Include="gfx_vertex_streams.h" />
     <ClInclude Include="linkedlist.h" />
     <ClInclude Include="sortedqueue.h" />
     <ClInclude Include="stackarray.h" />

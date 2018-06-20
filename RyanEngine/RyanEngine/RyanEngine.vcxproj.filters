@@ -138,6 +138,9 @@
     <ClInclude Include="freelist.h">
       <Filter>Containers</Filter>
     </ClInclude>
+    <ClInclude Include="gfx_vertex_streams.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_main.cpp">

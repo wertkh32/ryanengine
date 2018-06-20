@@ -1,8 +1,10 @@
 #pragma once
 #include <stdint.h>
+#include "gfx_vertex_streams.h"
 
 #define MODEL_MAX_LODS	5
 #define ASSET_NAME_LENGTH 256
+#define INVALID_DATA_OFFSET (~0U)
 
 enum GfxShaderType
 {
@@ -12,16 +14,6 @@ enum GfxShaderType
 	GFX_PIXEL_SHADER,
 
 	GFX_SHADER_TYPE_COUNT,
-};
-
-
-enum GfxVertexType
-{
-	GFX_VERTEX_XYZ,
-	GFX_VERTEX_UV,
-	//GFX_VERTEX_NORMAL,
-	//GFX_VERTEX_TANGENT,
-	GFX_VERTEX_COUNT,
 };
 
 

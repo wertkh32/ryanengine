@@ -1,21 +1,20 @@
 #pragma once
-#include "feature.h"
 #include <stdint.h>
 
-typedef unsigned int	uint;
-typedef unsigned char	uchar;
-typedef unsigned short	ushort;
-typedef unsigned long	ulong;
-typedef uchar			byte;
+typedef uint32_t	uint;
+typedef uint8_t		uchar;
+typedef uint16_t	ushort;
+typedef uint32_t	ulong;
+typedef uint8_t		byte;
 
-typedef unsigned long		uint32;
-typedef unsigned long long	uint64;
+typedef uint32_t	uint32;
+typedef uint64_t	uint64;
 
-typedef long		int32;
-typedef long long	int64;
+typedef int32_t		int32;
+typedef int64_t		int64;
 
-typedef volatile int32 v_int32;
-typedef volatile int64 v_int64;
+typedef volatile int32 vint32;
+typedef volatile int64 vint64;
 
 typedef float float2[2];
 typedef float float3[3];
