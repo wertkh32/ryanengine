@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "gfx_texture_types.h"
 #include "gfx_vertex_streams.h"
 
 #define MODEL_MAX_LODS	5
@@ -27,7 +28,7 @@ struct ShaderAssetRaw
 
 struct TextureAssetRaw
 {
-	const char name[ASSET_NAME_LENGTH];
+	char name[ASSET_NAME_LENGTH];
 	uint32_t width;
 	uint32_t height;
 	uint32_t pixelFormat;
@@ -52,7 +53,7 @@ struct SurfaceAssetRaw
 	uint32_t vertexCount;
 	uint32_t indexCount;
 	
-	uint32_t materialDataOffset;	//relative offset to MaterialAssetRaw
+	uint32_t materialIndex;	//relative offset to MaterialAssetRaw
 
 	uint32_t vertexBufferDataOffset[GFX_VERTEX_COUNT];
 	uint32_t indexBufferDataOffset;
@@ -72,6 +73,8 @@ struct ModelAssetRaw
 	
 	uint32_t numLods;
 	uint32_t modelLODsDataOffset;	//relative offset to an array of ModelLODAssetRaws
+	uint32_t numMaterials;
+	uint32_t materialsDataOffset;
 };
 
 

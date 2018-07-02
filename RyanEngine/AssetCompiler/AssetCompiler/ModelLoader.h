@@ -9,14 +9,18 @@ using namespace Assimp;
 
 struct StackAllocator;
 
+#define MODEL_PATH_LEN 256U
+
 class ModelLoader
 {
 	Importer importer;
 	const aiScene* scene;
+	char modelFilePath[MODEL_PATH_LEN];
 
+	bool isTextureOnDisk ( const char* filePath );
 	void processNode ( aiNode * node );
 public:
-	void getModelFromAIScene ( ModelAssetRaw *model, StackAllocator *allocator );
+	void getModelFromAIScene ( StackAllocator *allocator );
 	ModelLoader ( const char* fileName );
 	~ModelLoader ();
 };

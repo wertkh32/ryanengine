@@ -16,6 +16,9 @@
     <Filter Include="shared">
       <UniqueIdentifier>{944ad586-054d-47fc-87f2-21a4a49396fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{ba84c265-d87b-4163-bedb-9a08d547bb24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetCompiler.cpp">
@@ -43,6 +46,21 @@
     </ClInclude>
     <ClInclude Include="Stack.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\gfx_vertex_streams.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\types.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_dxt.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\gfx_texture_types.h">
+      <Filter>shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

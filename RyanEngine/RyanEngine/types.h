@@ -20,6 +20,9 @@ typedef float float2[2];
 typedef float float3[3];
 typedef float float4[4];
 
+typedef byte rgb_t[3];
+typedef byte rgba_t[4];
+
 
 #define VERTEXPOS			float3 pos;
 
