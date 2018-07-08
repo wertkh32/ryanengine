@@ -287,3 +287,14 @@ paket-files/
 *.mtl
 *.db
 *.exp
+scenes/
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.bak
+*.cache
+[Bb]in
+[Dd]ebug*/
+obj/
+[Rr]elease*/
+[Tt]est[Rr]esult*

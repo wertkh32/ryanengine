@@ -5,13 +5,18 @@
 #include <assert.h>
 #include <string>
 #include <cstring>
+#include "string_utils.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#define STB_DXT_IMPLEMENTATION
+#include "stb_dxt.h"
 
 #define MAX_NODES 64
+#define BLOCK_COUNT( x, n ) ( ( (x) + ( n - 1 ) ) / ( n ) )
 
-ModelLoader::ModelLoader ( const char* fileName )
+
+ModelLoader::ModelLoader ( const char* fileName, StackAllocator *alloc )
 {
 	scene = importer.ReadFile ( fileName,
 		aiProcessPreset_TargetRealtime_Fast |
@@ -20,13 +25,16 @@ ModelLoader::ModelLoader ( const char* fileName )
 
 	strncpy_s ( modelFilePath, fileName, MODEL_PATH_LEN );
 
+	allocator = alloc;
+	baseOffset = alloc->currentSize;
+
 	assert ( scene );
 }
 
 
-void ModelLoader::processNode ( aiNode * node )
+uint32_t ModelLoader::getCurrentOffset ()
 {
-	return;
+	return allocator->currentSize - baseOffset;
 }
 
 
@@ -35,26 +43,80 @@ bool ModelLoader::isTextureOnDisk ( const char* filePath )
 	return ( strrchr( filePath, '.' ) != NULL );
 }
 
+bool ModelLoader::processTextureAsBC1 ( rgba_t * inputTexture, uint32_t width, uint32_t height )
+{
+	uint widthBlocks = BLOCK_COUNT ( width, 4 );
+	uint heightBlocks = BLOCK_COUNT ( height, 4 );
 
-void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
+	uint numBlocks = widthBlocks * heightBlocks;
+	
+	cblock8_t *fileTextureData = allocateFileMem< cblock8_t > ( numBlocks );
+	
+	printf ( "Compressing texture to BC1\n" );
+
+	if ( !fileTextureData )
+	{
+		printf ( "Failed allocating texture data on file buffer" );
+		return false;
+	}
+
+	for ( uint y = 0; y < heightBlocks; y++ )
+	{
+		for ( uint x = 0; x < widthBlocks; x++ )
+		{
+			rgba_t inputBlock[4][4];
+			cblock8_t compressedBlock;
+
+			for ( uint by = 0; by < 4; by++ )
+			{
+				for ( uint bx = 0; bx < 4; bx++ )
+				{
+					uint pix_x = x * 4 + bx;
+					uint pix_y = y * 4 + by;
+
+					// if width/height not a multiple of 4, just clamp it.
+					if ( pix_x >= width && pix_y >= height )
+						inputBlock[by][bx] = inputTexture[ ( height - 1 ) * width + ( width - 1 ) ];
+					else if ( pix_x >= width )
+						inputBlock[by][bx] = inputTexture[ pix_y * width + (width - 1)];
+					else if( pix_y >= height )
+						inputBlock[by][bx] = inputTexture[ ( height - 1 )* width + ( pix_x ) ];
+					else
+						inputBlock[by][bx] = inputTexture[ ( pix_y )* width + ( pix_x ) ];
+				}
+			}
+
+			stb_compress_dxt_block ( reinterpret_cast< unsigned char* >( &compressedBlock ), 
+									 reinterpret_cast< unsigned char* >( inputBlock ),
+									 0, 0 );
+
+			fileTextureData[ y * widthBlocks + x ] = compressedBlock;
+		}
+	}
+
+	printf ( "Compressed Texture to BC1, original size: %d, compressed size %d\n", width * height * sizeof ( rgba_t ), numBlocks * sizeof ( cblock8_t ) );
+
+	return true;
+}
+
+
+void ModelLoader::getModelFromAIScene ()
 {
 	ModelAssetRaw *modelAsset;
 	ModelLODAssetRaw *modelLODAsset;
 	SurfaceAssetRaw *surfaceAssets;
 	
-	uint32_t baseOffset;
+	assert( baseOffset == allocator->currentSize );
 
-	baseOffset = allocator->currentSize;
-
-	modelAsset = reinterpret_cast< ModelAssetRaw* >( allocator->allocBytes ( sizeof ( ModelAssetRaw ) ) );
+	modelAsset = allocateFileMem< ModelAssetRaw >( 1 );
 	modelAsset->numLods = 1; 	//Only 1 lod for now
-	modelAsset->modelLODsDataOffset = allocator->currentSize - baseOffset;
+	modelAsset->modelLODsDataOffset = getCurrentOffset ();
 	
-	modelLODAsset = reinterpret_cast< ModelLODAssetRaw* >( allocator->allocBytes ( sizeof ( ModelLODAssetRaw ) ) );
+	modelLODAsset = allocateFileMem< ModelLODAssetRaw > ( 1 );
 	modelLODAsset->numSurfaces = scene->mNumMeshes;
-	modelLODAsset->surfacesDataOffset = allocator->currentSize - baseOffset;
+	modelLODAsset->surfacesDataOffset = getCurrentOffset ();
 
-	surfaceAssets = reinterpret_cast< SurfaceAssetRaw* >( allocator->allocBytes ( sizeof ( SurfaceAssetRaw ) * modelLODAsset->numSurfaces ) );
+	surfaceAssets = allocateFileMem< SurfaceAssetRaw > ( modelLODAsset->numSurfaces );
 
 	for ( uint32_t i = 0; i < scene->mNumMeshes; i++ )
 	{
@@ -72,9 +134,9 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 		{ // GFX_VERTEX_XYZ
 			assert ( mesh->HasPositions() );
 
-			surf.vertexBufferDataOffset[GFX_VERTEX_XYZ] = allocator->currentSize - baseOffset;
+			surf.vertexBufferDataOffset[GFX_VERTEX_XYZ] = getCurrentOffset ();
 
-			pos_t *xyz = reinterpret_cast<pos_t*>(allocator->allocBytes ( GFX_VERTEX_XYZ_SIZE * surf.vertexCount ));
+			pos_t *xyz = allocateFileMem< pos_t >( surf.vertexCount );
 
 			for ( uint32_t vindex = 0; vindex < surf.vertexCount; vindex++ )
 			{
@@ -88,9 +150,9 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 		{ // GFX_VERTEX_UV
 			if ( mesh->mTextureCoords[0] != nullptr )
 			{
-				surf.vertexBufferDataOffset[GFX_VERTEX_UV] = allocator->currentSize - baseOffset;
+				surf.vertexBufferDataOffset[GFX_VERTEX_UV] = getCurrentOffset ();
 
-				uv_t *uvs = reinterpret_cast<uv_t*>(allocator->allocBytes ( GFX_VERTEX_UV_SIZE * surf.vertexCount ));
+				uv_t *uvs = allocateFileMem< uv_t > ( surf.vertexCount );
 
 				for ( uint32_t vindex = 0; vindex < surf.vertexCount; vindex++ )
 				{
@@ -104,9 +166,9 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 		{ // GFX_VERTEX_NORMAL
 			if ( mesh->mNormals != nullptr )
 			{
-				surf.vertexBufferDataOffset[GFX_VERTEX_NORMAL] = allocator->currentSize - baseOffset;
+				surf.vertexBufferDataOffset[GFX_VERTEX_NORMAL] = getCurrentOffset ();
 
-				axis_t *normals = reinterpret_cast<axis_t*>(allocator->allocBytes ( GFX_VERTEX_NORMAL_SIZE * surf.vertexCount ));
+				axis_t *normals = allocateFileMem< axis_t > ( surf.vertexCount );
 
 				for ( uint32_t vindex = 0; vindex < surf.vertexCount; vindex++ )
 				{
@@ -121,9 +183,9 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 		{ // GFX_VERTEX_TANGENT
 			if ( mesh->mTangents != nullptr )
 			{
-				surf.vertexBufferDataOffset[GFX_VERTEX_TANGENT] = allocator->currentSize - baseOffset;
+				surf.vertexBufferDataOffset[GFX_VERTEX_TANGENT] = getCurrentOffset ();
 
-				axis_t *tangents = reinterpret_cast<axis_t*>( allocator->allocBytes ( GFX_VERTEX_TANGENT_SIZE * surf.vertexCount ) );
+				axis_t *tangents = allocateFileMem< axis_t > ( surf.vertexCount );
 
 				for ( uint32_t vindex = 0; vindex < surf.vertexCount; vindex++ )
 				{
@@ -138,9 +200,9 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 		{ // Indices
 			assert ( mesh->HasFaces () );
 
-			surf.indexBufferDataOffset = allocator->currentSize - baseOffset;
+			surf.indexBufferDataOffset = getCurrentOffset ();
 
-			index_t *indices = reinterpret_cast<index_t*>( allocator->allocBytes ( sizeof( index_t ) * surf.indexCount ) );
+			index_t *indices = allocateFileMem< index_t > ( surf.indexCount );
 
 			for ( uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++ )
 			{
@@ -170,9 +232,9 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 
 
 	modelAsset->numMaterials = scene->mNumMaterials;
-	modelAsset->materialsDataOffset = allocator->currentSize - baseOffset;
+	modelAsset->materialsDataOffset = getCurrentOffset ();
 
-	MaterialAssetRaw *materialsRaw = reinterpret_cast< MaterialAssetRaw* >(allocator->allocBytes ( sizeof ( MaterialAssetRaw ) * modelAsset->numMaterials ));
+	MaterialAssetRaw *materialsRaw = allocateFileMem< MaterialAssetRaw > ( modelAsset->numMaterials );
 
 	for ( uint i = 0; i < scene->mNumMaterials; i++ )
 	{
@@ -181,7 +243,7 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 		materialsRaw[i].numShaders = 0; // for now
 		materialsRaw[i].numTextures = 0; // init
 		materialsRaw[i].shadersDataOffset = INVALID_DATA_OFFSET; // for now
-		materialsRaw[i].texturesDataOffset = allocator->currentSize - baseOffset;
+		materialsRaw[i].texturesDataOffset = getCurrentOffset ();
 
 		printf ( "Loading Material %d\n", i );
 
@@ -225,7 +287,7 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 
 				printf ( "Loading texture at path %s\n", correctedPath );
 
-				rgb_t *textureData = reinterpret_cast< rgb_t* >( stbi_load ( correctedPath, &width, &height, &components, 3 ) );
+				rgba_t *textureData = reinterpret_cast< rgba_t* >( stbi_load ( correctedPath, &width, &height, &components, 4 ) );
 
 				if ( !textureData )
 				{
@@ -233,12 +295,7 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 					goto invalid_texture;
 				}
 
-				const char *name = strrchr ( cpath, '\\' );
-
-				if ( name )
-					name++;
-				else
-					name = cpath;
+				const char *name = GetFileNameFromPath ( cpath );
 
 				uint nameLength = strnlen ( name, ASSET_NAME_LENGTH );
 				
@@ -251,22 +308,13 @@ void ModelLoader::getModelFromAIScene ( StackAllocator *allocator )
 				
 				textureAsset->width = static_cast<uint32_t>(width);
 				textureAsset->height = static_cast<uint32_t>(height);
-				textureAsset->pixelFormat = 0; // populate later. now everything is just rgb8
-				textureAsset->pixelSize = sizeof ( rgb_t );
-				textureAsset->textureDataOffset = allocator->currentSize - baseOffset;
+				textureAsset->pixelFormat = GFX_TEX_PIXEL_SIZE_BC1; // for now since we are only touching diffuse textures
+				textureAsset->pixelSize = GFX_TEX_FORMAT_BC1; // for now since we are only touchying diffuse textures
+				textureAsset->textureDataOffset = getCurrentOffset ();
 				
-				uint textureSizeInBytes = sizeof ( rgb_t ) * width * height;
-				
-				rgb_t *fileTextureData = reinterpret_cast<rgb_t*>(allocator->allocBytes ( textureSizeInBytes ));
-				
-				if ( !fileTextureData )
-				{
-					printf ( "Failed allocating texture data for %s on file buffer", name );
+				if ( !processTextureAsBC1 ( textureData, width, height ) )
 					goto invalid_texture;
-				}
 
-				memcpy ( fileTextureData, textureData, textureSizeInBytes );
-				
 				stbi_image_free ( textureData );			
 			}
 			else

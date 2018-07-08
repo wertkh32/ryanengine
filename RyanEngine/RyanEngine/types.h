@@ -20,9 +20,26 @@ typedef float float2[2];
 typedef float float3[3];
 typedef float float4[4];
 
-typedef byte rgb_t[3];
-typedef byte rgba_t[4];
+typedef struct
+{
+	byte r, g, b;
+} rgb_t;
 
+typedef struct
+{
+	byte r, g, b, a;
+} rgba_t;
+
+typedef struct
+{
+	byte data[8];
+} cblock8_t; // for BC1, BC4
+
+
+typedef struct
+{
+	byte data[16];
+} cblock16_t; // for BC3, BC5
 
 #define VERTEXPOS			float3 pos;
 
