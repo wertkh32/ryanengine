@@ -473,6 +473,11 @@ void SceneCompiler::getModelFromAIScene ()
 	}
 	
 	assert( loadedTextureCount == sceneTextureCount );
+
+	printf ( "\nScene Compiled! Scene has %d models\n", sceneAsset->numModels );
+	printf ( "%d surfaces\n", sceneAsset->numSurfaces );
+	printf ( "%d materials\n", sceneAsset->numMaterials );
+	printf ( "%d textures\n", sceneAsset->numTextures );
 }
 
 
