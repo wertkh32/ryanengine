@@ -6,7 +6,7 @@ GfxGpuTexture::GfxGpuTexture ( uint _width, uint _height, uint _depth, GFX_FORMA
 	DXGI_FORMAT dxgiFormat = static_cast< DXGI_FORMAT >( _format );
 	bool isUAV = !!( _resourceFlags & GFX_RESOURCE_UAV );
 	
-	gfx_resource_desc_t textureDesc;
+	D3D12_RESOURCE_DESC textureDesc;
 
 	assert ( width <= MAX_TEXTURE_DIM && height <= MAX_TEXTURE_DIM );
 
@@ -43,7 +43,7 @@ GfxGpuTexture::GfxGpuTexture ( uint _width, uint _height, uint _depth, GFX_FORMA
 	resource = resman->allocateTexture ( &textureDesc, _resourceFlags );
 }
 
-void GfxGpuTexture::CreateDefaultSRV ( gfx_desc_handle_t & descHandle )
+void GfxGpuTexture::CreateDefaultSRV ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle )
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -83,7 +83,7 @@ void GfxGpuTexture::CreateDefaultSRV ( gfx_desc_handle_t & descHandle )
 	g_gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
 }
 
-void GfxGpuTexture::CreateDefaultUAV ( gfx_desc_handle_t & descHandle )
+void GfxGpuTexture::CreateDefaultUAV ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle )
 {
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 
@@ -112,7 +112,7 @@ void GfxGpuTexture::CreateDefaultUAV ( gfx_desc_handle_t & descHandle )
 	g_gfxDevice->CreateUnorderedAccessView ( resource, nullptr, &uavDesc, descHandle );
 }
 
-void GfxGpuTexture::CreateCustomTex2DSRV ( gfx_desc_handle_t & descHandle, uint firstMip, uint numMips, float minLODClamp )
+void GfxGpuTexture::CreateCustomTex2DSRV ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint firstMip, uint numMips, float minLODClamp )
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -128,7 +128,7 @@ void GfxGpuTexture::CreateCustomTex2DSRV ( gfx_desc_handle_t & descHandle, uint 
 	g_gfxDevice->CreateShaderResourceView ( resource, &srvDesc, descHandle );
 }
 
-void GfxGpuTexture::CreateCustomTex2DUAV ( gfx_desc_handle_t & descHandle, uint mipSlice )
+void GfxGpuTexture::CreateCustomTex2DUAV ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint mipSlice )
 {
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 

@@ -27,7 +27,7 @@ struct StackAllocator
 	{
 		byte *ret;
 
-		if ( currentSize + sizeInBytes > totalSize )
+		if ( !sizeInBytes || ( currentSize + sizeInBytes > totalSize ) )
 			return nullptr;
 
 		ret = array + currentSize;

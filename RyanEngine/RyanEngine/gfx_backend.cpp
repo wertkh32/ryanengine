@@ -1,4 +1,4 @@
 #pragma once
 #include "gfx_backend.h"
 
-gfx_device_t *g_gfxDevice = nullptr;
+ID3D12Device *g_gfxDevice = nullptr;

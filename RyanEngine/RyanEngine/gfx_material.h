@@ -14,7 +14,7 @@ enum GFX_MATERIAL_FLAG
 struct GfxMaterial
 {
 	const char			*name;
-	gfx_memblob_t		*vertexShader;
-	gfx_memblob_t		*pixelShader;
+	ID3DBlob		*vertexShader;
+	ID3DBlob		*pixelShader;
 	GfxMaterialFlags	flags;
 };

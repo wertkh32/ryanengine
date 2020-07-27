@@ -19,6 +19,9 @@
     <Filter Include="external">
       <UniqueIdentifier>{ba84c265-d87b-4163-bedb-9a08d547bb24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{3168312e-2f30-4d4d-bf26-c416899722b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetCompiler.cpp">
@@ -27,11 +30,14 @@
     <ClCompile Include="SceneLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="string_utils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneCompiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\RyanEngine\quatn.cpp">
+      <Filter>math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,9 +46,6 @@
     </ClInclude>
     <ClInclude Include="..\..\RyanEngine\asset_structs.h">
       <Filter>shared</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelLoader.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StackAllocator.h">
       <Filter>Header Files</Filter>
@@ -67,6 +70,27 @@
     </ClInclude>
     <ClInclude Include="string_utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneCompiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\asset_defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\mat4x4_math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\math_macros.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\quatn.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\vec3_math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\RyanEngine\vec4_math.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

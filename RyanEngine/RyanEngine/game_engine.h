@@ -12,10 +12,14 @@ private:
 public:
 	static Game_Engine* Instance()
 	{
+		static ALIGN( 16 ) byte inplaceMem[sizeof( Game_Engine )];
 		static Game_Engine* engine = 0;
 		// instantiate only once... no more
 		if( !engine )
-			engine = new Game_Engine();
+		{
+			void *mem = reinterpret_cast< void* >( inplaceMem );
+			engine = new ( mem ) Game_Engine();
+		}
 		return engine;
 	}
 

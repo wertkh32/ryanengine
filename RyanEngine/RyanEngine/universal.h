@@ -9,6 +9,7 @@
 
 #include <math.h>
 #include <string>
+#include <new>
 #include <assert.h>
 #include <intrin.h>
 #include <xmmintrin.h>

@@ -1,7 +1,7 @@
 #include "gfx_constantbuffers.h"
 
 
-void Gfx_CreateConstantBuffer( gfx_device_t *gfxDevice, gfx_cbuffer **cbuffer, gfx_desc_handle_t descHandle, uint size )
+void Gfx_CreateConstantBuffer( ID3D12Device *gfxDevice, gfx_cbuffer **cbuffer, D3D12_CPU_DESCRIPTOR_HANDLE descHandle, uint size )
 {
 	uint alignedSize = ALIGN_UP ( size, 256 );
 

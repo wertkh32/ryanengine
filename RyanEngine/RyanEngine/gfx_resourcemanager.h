@@ -11,7 +11,7 @@
 
 sassert ( MEM_MAN_RESOURCE_ALIGNMENT == GPU_PAGE_SIZE );
 
-enum GFX_RESOURCE_TYPE
+enum ID3D12ResourceYPE
 {
 	GFX_RESOURCE_WRITE_COMBINE = 0x1,
 	GFX_RESOURCE_UAV = 0x2,
@@ -30,23 +30,23 @@ class GfxResourceManager : public Singleton<GfxResourceManager>
 {
 	friend Singleton<GfxResourceManager>;
 private:
-	gfx_device_t  *gfxDevice;
+	ID3D12Device  *gfxDevice;
 
 	uint staticResourceCount;
 	uint dynamicResourceCount;
 
-	gfx_heap_t	  *bufferHeap;
-	gfx_heap_t	  *uploadHeap;
-	gfx_heap_t	  *textureHeap;
+	ID3D12Heap	  *bufferHeap;
+	ID3D12Heap	  *uploadHeap;
+	ID3D12Heap	  *textureHeap;
 
 	uint		  bufferHeapOffset;
 	uint		  uploadHeapOffset;
 	uint		  textureHeapOffset;
 
-	gfx_resource_t *staticResources[MAX_STATIC_RESOURCES];
-	gfx_resource_t *dynamicResources[MAX_DYNAMIC_RESOURCES];
+	ID3D12Resource *staticResources[MAX_STATIC_RESOURCES];
+	ID3D12Resource *dynamicResources[MAX_DYNAMIC_RESOURCES];
 	
-	uint getResourceAllocSize ( const gfx_resource_desc_t *resourceDesc )
+	uint getResourceAllocSize ( const D3D12_RESOURCE_DESC *resourceDesc )
 	{
 		D3D12_RESOURCE_ALLOCATION_INFO allocInfo = gfxDevice->GetResourceAllocationInfo ( 0, 1, resourceDesc );
 
@@ -58,11 +58,11 @@ private:
 	GfxResourceManager ();
 	~GfxResourceManager ();
 public:
-	void Init ( gfx_device_t *_gfxDevice );
+	void Init ( ID3D12Device *_gfxDevice );
 
-	gfx_resource_t *allocateBuffer ( const gfx_resource_desc_t *desc, uint resourceFlags );
+	ID3D12Resource *allocateBuffer ( const D3D12_RESOURCE_DESC *desc, uint resourceFlags );
 
-	gfx_resource_t *allocateTexture ( const gfx_resource_desc_t *textureDesc, uint resourceFlags );
+	ID3D12Resource *allocateTexture ( const D3D12_RESOURCE_DESC *textureDesc, uint resourceFlags );
 
 	void deallocateAllDynamicResources (); // this is called when a scene is shutdown
 	

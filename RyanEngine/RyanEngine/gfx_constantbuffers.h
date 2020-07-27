@@ -3,7 +3,7 @@
 #include "gfx_globals.h"
 #include "gfx_math.h"
 
-typedef gfx_resource_t		gfx_cbuffer;
+typedef ID3D12Resource		gfx_cbuffer;
 
 //constant buffers must be multiples of 16
 struct gfx_transform_buffer_t
@@ -38,4 +38,4 @@ const uint g_constantBufferSizes[GFX_CONSTANT_BUFFER_COUNT] =
 };
 
 
-void Gfx_CreateConstantBuffer( gfx_device_t *gfxDevice, gfx_cbuffer **cbuffer, gfx_desc_handle_t descHandle, uint size );
+void Gfx_CreateConstantBuffer( ID3D12Device *gfxDevice, gfx_cbuffer **cbuffer, D3D12_CPU_DESCRIPTOR_HANDLE descHandle, uint size );

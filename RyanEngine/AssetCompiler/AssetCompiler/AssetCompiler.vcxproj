@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -165,17 +165,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\RyanEngine\quatn.cpp" />
     <ClCompile Include="AssetCompiler.cpp" />
-    <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="SceneCompiler.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="string_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\RyanEngine\asset_defines.h" />
     <ClInclude Include="..\..\RyanEngine\asset_structs.h" />
     <ClInclude Include="..\..\RyanEngine\gfx_texture_types.h" />
     <ClInclude Include="..\..\RyanEngine\gfx_vertex_streams.h" />
+    <ClInclude Include="..\..\RyanEngine\mat4x4_math.h" />
+    <ClInclude Include="..\..\RyanEngine\math_macros.h" />
+    <ClInclude Include="..\..\RyanEngine\quatn.h" />
     <ClInclude Include="..\..\RyanEngine\types.h" />
-    <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="..\..\RyanEngine\vec3_math.h" />
+    <ClInclude Include="..\..\RyanEngine\vec4_math.h" />
+    <ClInclude Include="SceneCompiler.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="StackAllocator.h" />

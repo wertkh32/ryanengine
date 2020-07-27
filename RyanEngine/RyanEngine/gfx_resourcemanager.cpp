@@ -12,7 +12,7 @@ GfxResourceManager::~GfxResourceManager ()
 }
 
 
-void GfxResourceManager::Init( gfx_device_t *_gfxDevice )
+void GfxResourceManager::Init( ID3D12Device *_gfxDevice )
 {
 	staticResourceCount = 0;
 	dynamicResourceCount = 0;
@@ -27,7 +27,7 @@ void GfxResourceManager::Init( gfx_device_t *_gfxDevice )
 
 
 	// buffer heap with default memory
-	gfx_heap_desc_t bufferHeapDesc = CD3DX12_HEAP_DESC ( BUFFER_HEAP_SIZE,
+	D3D12_HEAP_DESC bufferHeapDesc = CD3DX12_HEAP_DESC ( BUFFER_HEAP_SIZE,
 														D3D12_HEAP_TYPE_DEFAULT, 
 														D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT, 
 														D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS );
@@ -36,7 +36,7 @@ void GfxResourceManager::Init( gfx_device_t *_gfxDevice )
 
 
 	// buffer heap with upload memory. Use for cpu write, gpu read buffer resources
-	gfx_heap_desc_t uploadHeapDesc = CD3DX12_HEAP_DESC ( UPLOAD_HEAP_SIZE,
+	D3D12_HEAP_DESC uploadHeapDesc = CD3DX12_HEAP_DESC ( UPLOAD_HEAP_SIZE,
 														 D3D12_HEAP_TYPE_UPLOAD,
 														 D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT,
 														 D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS );
@@ -45,7 +45,7 @@ void GfxResourceManager::Init( gfx_device_t *_gfxDevice )
 	
 
 	// texture heap with default memory.
-	gfx_heap_desc_t textureHeapDesc = CD3DX12_HEAP_DESC ( TEXTURE_HEAP_SIZE,
+	D3D12_HEAP_DESC textureHeapDesc = CD3DX12_HEAP_DESC ( TEXTURE_HEAP_SIZE,
 														  D3D12_HEAP_TYPE_DEFAULT,
 														  D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT,
 														  D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES );
@@ -58,16 +58,16 @@ void GfxResourceManager::Init( gfx_device_t *_gfxDevice )
 }
 
 
-gfx_resource_t * GfxResourceManager::allocateBuffer ( const gfx_resource_desc_t *desc, uint resourceFlags )
+ID3D12Resource * GfxResourceManager::allocateBuffer ( const D3D12_RESOURCE_DESC *desc, uint resourceFlags )
 {
 	bool isUAV = !!( resourceFlags & GFX_RESOURCE_UAV );
 	bool isWriteCombine = !!( resourceFlags & GFX_RESOURCE_WRITE_COMBINE );
 
-	gfx_heap_t *heap = isWriteCombine ? uploadHeap : bufferHeap;
+	ID3D12Heap *heap = isWriteCombine ? uploadHeap : bufferHeap;
 	uint *heapOffset = isWriteCombine ? &uploadHeapOffset : &bufferHeapOffset;
 
-	gfx_resource_t *buffer = nullptr;
-	gfx_resource_state_t state = D3D12_RESOURCE_STATE_COMMON;
+	ID3D12Resource *buffer = nullptr;
+	D3D12_RESOURCE_STATES state = D3D12_RESOURCE_STATE_COMMON;
 
 	assert ( gfxDevice );
 
@@ -88,11 +88,11 @@ gfx_resource_t * GfxResourceManager::allocateBuffer ( const gfx_resource_desc_t 
 }
 
 
-gfx_resource_t * GfxResourceManager::allocateTexture ( const gfx_resource_desc_t *textureDesc, uint resourceFlags )
+ID3D12Resource * GfxResourceManager::allocateTexture ( const D3D12_RESOURCE_DESC *textureDesc, uint resourceFlags )
 {
-	gfx_resource_t *texture = nullptr;
+	ID3D12Resource *texture = nullptr;
 	bool isUAV = !!( resourceFlags & GFX_RESOURCE_UAV );
-	gfx_resource_state_t state = D3D12_RESOURCE_STATE_COPY_DEST;
+	D3D12_RESOURCE_STATES state = D3D12_RESOURCE_STATE_COPY_DEST;
 
 	assert ( gfxDevice );
 

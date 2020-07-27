@@ -13,4 +13,4 @@
 #define GFX_CONSTANT_BUFFER_ALIGNMENT	( 256U ) // D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT
 #define GPU_PAGE_SIZE					( 64 * KB )
 
-extern gfx_device_t *g_gfxDevice;
+extern ID3D12Device *g_gfxDevice;

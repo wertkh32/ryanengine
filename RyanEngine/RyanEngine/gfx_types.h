@@ -7,23 +7,23 @@
 
 struct GfxVertBuffer
 {
-	gfx_resource_t *buffer;
-	gfx_vert_buffer_view_t bufferView;
+	ID3D12Resource *buffer;
+	D3D12_VERTEX_BUFFER_VIEW bufferView;
 	byte *mappedPtr;
 };
 
 
 struct GfxIndexBuffer
 {
-	gfx_resource_t *buffer;
-	gfx_index_buffer_view_t bufferView;
+	ID3D12Resource *buffer;
+	D3D12_INDEX_BUFFER_VIEW bufferView;
 	byte *mappedPtr;
 };
 
 
 struct GfxBuffer
 {
-	gfx_resource_t *buffer;
+	ID3D12Resource *buffer;
 	byte *mappedPtr;
 };
 

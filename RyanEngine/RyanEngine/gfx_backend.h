@@ -9,14 +9,14 @@
 
 struct GfxPerFrameData
 {	// for static perframe data
-	gfx_resource_t			*gfxRenderTarget;
-	gfx_cmdalloc_t			*gfxCmdAllocator;
+	ID3D12Resource			*gfxRenderTarget;
+	ID3D12CommandAllocator			*gfxCmdAllocator;
 
-	gfx_descheap_t			*gfxCBVDescHeap;
-	gfx_resource_t			*gfxConstantBuffers[GFX_CONSTANT_BUFFER_COUNT];
+	ID3D12DescriptorHeap			*gfxCBVDescHeap;
+	ID3D12Resource			*gfxConstantBuffers[GFX_CONSTANT_BUFFER_COUNT];
 	byte					*gfxConstantBufferData[GFX_CONSTANT_BUFFER_COUNT];
 
-	gfx_fence_t				*gfxEndFrameFence;
+	ID3D12Fence				*gfxEndFrameFence;
 	uint64_t				gfxEndFrameFenceValue;
 };
 
@@ -35,17 +35,17 @@ struct GfxPerFrameDataDyn
 };
 
 
-static gfx_factory_t* Gfx_CreateFactory()
+static IDXGIFactory4* Gfx_CreateFactory()
 {	// create factory to interface with hardware graphics adapter options ( gpus )
-	gfx_factory_t* gfxFactory;
+	IDXGIFactory4* gfxFactory;
 	DXERROR(CreateDXGIFactory1(IID_PPV_ARGS(&gfxFactory)));
 	return gfxFactory;
 }
 
 
-static gfx_adapter_t* Gfx_SelectAdapter( gfx_factory_t* gfxFactory )
+static IDXGIAdapter1* Gfx_SelectAdapter( IDXGIFactory4* gfxFactory )
 {	// return the first adapter that supports DX12
-	gfx_adapter_t* _adapter;
+	IDXGIAdapter1* _adapter;
 
 	for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != gfxFactory->EnumAdapters1(adapterIndex, &_adapter); ++adapterIndex)
 	{
@@ -69,19 +69,19 @@ static gfx_adapter_t* Gfx_SelectAdapter( gfx_factory_t* gfxFactory )
 }
 
 
-static gfx_device_t* Gfx_CreateDevice( gfx_adapter_t* hardwareAdapter )
+static ID3D12Device* Gfx_CreateDevice( IDXGIAdapter1* hardwareAdapter )
 {	// actually create the device
-	gfx_device_t* gfxDevice;
+	ID3D12Device* gfxDevice;
 	DXERROR(D3D12CreateDevice( hardwareAdapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS( &gfxDevice ) ) );
 	return gfxDevice;
 }
 
 
-static gfx_cmdqueue_t* Gfx_CreateCommandQueue ( gfx_device_t* gfxDevice )
+static ID3D12CommandQueue* Gfx_CreateCommandQueue ( ID3D12Device* gfxDevice )
 {	// A thread records command lists with regular draw API or command bundles
 	// threads submit command lists to command queues. Command queues execute command lists
 	// command queues are similar to the idea of contexts in dx11 and gnm
-	gfx_cmdqueue_t* gfxCmdQueue;
+	ID3D12CommandQueue* gfxCmdQueue;
 
 	assert( gfxDevice );
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
@@ -94,9 +94,9 @@ static gfx_cmdqueue_t* Gfx_CreateCommandQueue ( gfx_device_t* gfxDevice )
 }
 
 
-static gfx_swapchain_t* Gfx_CreateSwapChain( gfx_factory_t* factory, gfx_cmdqueue_t* gfxCmdQueue, ctx_handle_t hwnd )
+static IDXGISwapChain3* Gfx_CreateSwapChain( IDXGIFactory4* factory, ID3D12CommandQueue* gfxCmdQueue, ctx_handle_t hwnd )
 {
-	gfx_swapchain_t* gfxSwapChain;
+	IDXGISwapChain3* gfxSwapChain;
 	// Describe and create the swap chain.
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.BufferCount = NUM_FRAMEBUFFERS;
@@ -107,7 +107,7 @@ static gfx_swapchain_t* Gfx_CreateSwapChain( gfx_factory_t* factory, gfx_cmdqueu
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.SampleDesc.Count = 1;
 
-	gfx_swapchain1_t* swapChain;
+	IDXGISwapChain1* swapChain;
 	DXERROR(factory->CreateSwapChainForHwnd(
 		gfxCmdQueue,		// Swap chain needs the queue so that it can force a flush on it. This used to be the device object (context)
 		hwnd,
@@ -123,9 +123,9 @@ static gfx_swapchain_t* Gfx_CreateSwapChain( gfx_factory_t* factory, gfx_cmdqueu
 }
 
 
-static gfx_descheap_t* Gfx_CreateRTVDescriptorHeapForRenderTargets( gfx_device_t* gfxDevice )
+static ID3D12DescriptorHeap* Gfx_CreateRTVDescriptorHeapForRenderTargets( ID3D12Device* gfxDevice )
 {
-	gfx_descheap_t* gfxDescHeap;
+	ID3D12DescriptorHeap* gfxDescHeap;
 	// Create descriptor heap for rendertargets
 	// A descriptor heap is a collection of descriptors that the gpu uses to access resources
 	{
@@ -141,9 +141,9 @@ static gfx_descheap_t* Gfx_CreateRTVDescriptorHeapForRenderTargets( gfx_device_t
 }
 
 
-static gfx_descheap_t* Gfx_CreateDSVDescriptorHeapForRenderTargets( gfx_device_t* gfxDevice )
+static ID3D12DescriptorHeap* Gfx_CreateDSVDescriptorHeapForRenderTargets( ID3D12Device* gfxDevice )
 {
-	gfx_descheap_t* gfxDescHeap;
+	ID3D12DescriptorHeap* gfxDescHeap;
 	// Create descriptor heap for depth stencil viewa of rendertargets
 	// A descriptor heap is a collection of descriptors that the gpu uses to access resources
 	{
@@ -158,8 +158,8 @@ static gfx_descheap_t* Gfx_CreateDSVDescriptorHeapForRenderTargets( gfx_device_t
 	return gfxDescHeap;
 }
 
-static void Gfx_InitFrameBuffersAndCommandAllocators(gfx_device_t* gfxDevice, gfx_descheap_t* gfxRTVDescHeap, gfx_descheap_t* gfxDSVDescHeap, gfx_swapchain_t* gfxSwapChain,
-													 GfxPerFrameData perFrameData[NUM_FRAMEBUFFERS], gfx_resource_t **gfxDepthStencilTarget )
+static void Gfx_InitFrameBuffersAndCommandAllocators(ID3D12Device* gfxDevice, ID3D12DescriptorHeap* gfxRTVDescHeap, ID3D12DescriptorHeap* gfxDSVDescHeap, IDXGISwapChain3* gfxSwapChain,
+													 GfxPerFrameData perFrameData[NUM_FRAMEBUFFERS], ID3D12Resource **gfxDepthStencilTarget )
 {
 	uint m_rtvDescSize = gfxDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
@@ -208,7 +208,7 @@ static void Gfx_InitFrameBuffersAndCommandAllocators(gfx_device_t* gfxDevice, gf
 
 
 /// stuff after here should be replaced by proper asseting loading stuff
-static void Gfx_InitConstantBufferDescHeaps( gfx_device_t* gfxDevice, GfxPerFrameData perFrameData[NUM_FRAMEBUFFERS] )
+static void Gfx_InitConstantBufferDescHeaps( ID3D12Device* gfxDevice, GfxPerFrameData perFrameData[NUM_FRAMEBUFFERS] )
 {	// create a collection of constant buffer descriptors
 	// one heap per frame
 
@@ -225,7 +225,7 @@ static void Gfx_InitConstantBufferDescHeaps( gfx_device_t* gfxDevice, GfxPerFram
 }
 
 
-static void Gfx_InitConstantBuffers( gfx_device_t* gfxDevice, GfxPerFrameData perFrameData[NUM_FRAMEBUFFERS] )
+static void Gfx_InitConstantBuffers( ID3D12Device* gfxDevice, GfxPerFrameData perFrameData[NUM_FRAMEBUFFERS] )
 {
 	// we need two copies for cpu-write, gpu read resources for proper double buffering
 	// this is not the case for cpu only or gpu only resources.
@@ -240,7 +240,7 @@ static void Gfx_InitConstantBuffers( gfx_device_t* gfxDevice, GfxPerFrameData pe
 
 		for (uint cbufferIndex = 0; cbufferIndex < GFX_CONSTANT_BUFFER_COUNT; cbufferIndex++)
 		{
-			gfx_resource_t *cbuffer = curFrameData->gfxConstantBuffers[cbufferIndex];
+			ID3D12Resource *cbuffer = curFrameData->gfxConstantBuffers[cbufferIndex];
 
 			Gfx_CreateConstantBuffer( gfxDevice, &cbuffer, cbvHandle, g_constantBufferSizes[cbufferIndex] );
 
@@ -259,10 +259,10 @@ static void Gfx_InitConstantBuffers( gfx_device_t* gfxDevice, GfxPerFrameData pe
 
 
 
-static gfx_rootsignature_t* Gfx_CreateRootSignature( gfx_device_t* gfxDevice )
+static ID3D12RootSignature* Gfx_CreateRootSignature( ID3D12Device* gfxDevice )
 {	// this function sets up all the bindings required for the shader resources
 
-	gfx_desc_range_t  descriptorTableRanges[1];															// only one range right now for const buffers, add more ranges for buffers, textures etc
+	D3D12_DESCRIPTOR_RANGE  descriptorTableRanges[1];															// only one range right now for const buffers, add more ranges for buffers, textures etc
 	descriptorTableRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;								// this is a range of constant buffer views (descriptors)
 	descriptorTableRanges[0].NumDescriptors = GFX_CONSTANT_BUFFER_COUNT;								// we only have one constant buffer, so the range is only 1
 	descriptorTableRanges[0].BaseShaderRegister = 0;													// start index of the shader registers in the range
@@ -270,18 +270,18 @@ static gfx_rootsignature_t* Gfx_CreateRootSignature( gfx_device_t* gfxDevice )
 	descriptorTableRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;  // this appends the range to the end of the root signature descriptor tables
 
 																									   // create a descriptor table
-	gfx_desc_table_t descriptorTable;
+	D3D12_ROOT_DESCRIPTOR_TABLE descriptorTable;
 	descriptorTable.NumDescriptorRanges = _countof ( descriptorTableRanges );							// we only have one range
 	descriptorTable.pDescriptorRanges = &descriptorTableRanges[0];										// the pointer to the beginning of our ranges array
 
 
-	gfx_root_parameter_t  rootParameters[1];															// only one parameter right now
+	D3D12_ROOT_PARAMETER  rootParameters[1];															// only one parameter right now
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;						// this is a descriptor table
 	rootParameters[0].DescriptorTable = descriptorTable;												// this is our descriptor table for this root parameter
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;								// our pixel shader will be the only shader accessing this parameter for now
 
 
-	gfx_rootsignature_t* gfxRootSignature;
+	ID3D12RootSignature* gfxRootSignature;
 	
 	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	rootSignatureDesc.Init ( _countof ( rootParameters ),												// we have 1 root parameter
@@ -295,8 +295,8 @@ static gfx_rootsignature_t* Gfx_CreateRootSignature( gfx_device_t* gfxDevice )
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS );
 
 
-	gfx_memblob_t* signature;
-	gfx_memblob_t* error;
+	ID3DBlob* signature;
+	ID3DBlob* error;
 	DXERROR( D3D12SerializeRootSignature( &rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error ) );
 	DXERROR( gfxDevice->CreateRootSignature( 0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS( &gfxRootSignature ) ) );
 
@@ -307,19 +307,19 @@ static gfx_rootsignature_t* Gfx_CreateRootSignature( gfx_device_t* gfxDevice )
 struct GfxGameRenderer
 {
 	ctx_handle_t			ctxHandle;
-	gfx_adapter_t			*gfxAdapter;
-	gfx_factory_t			*gfxFactory;
-	gfx_device_t			*gfxDevice;
-	gfx_cmdqueue_t			*gfxCmdQueue;
-	gfx_swapchain_t			*gfxSwapChain;
-	gfx_cmdlist_t			*gfxCmdList;
-	gfx_descheap_t			*gfxRTDescHeap;
-	gfx_descheap_t			*gfxDSVDescHeap;
+	IDXGIAdapter1			*gfxAdapter;
+	IDXGIFactory4			*gfxFactory;
+	ID3D12Device			*gfxDevice;
+	ID3D12CommandQueue			*gfxCmdQueue;
+	IDXGISwapChain3			*gfxSwapChain;
+	ID3D12GraphicsCommandList *gfxCmdList;
+	ID3D12DescriptorHeap			*gfxRTDescHeap;
+	ID3D12DescriptorHeap			*gfxDSVDescHeap;
 	uint					gfxRTDescSize;
 	uint					gfxDSVDescSize;
-	gfx_resource_t			*gfxDepthStencilTarget;
+	ID3D12Resource			*gfxDepthStencilTarget;
 
-	gfx_rootsignature_t		*gfxRootSignature;
+	ID3D12RootSignature		*gfxRootSignature;
 
 	GfxPerFrameData			perFrameData[NUM_FRAMEBUFFERS];
 	GfxViewInfo				viewInfo;
@@ -327,19 +327,19 @@ struct GfxGameRenderer
 	uint					frameCount;
 	uint					frameIndex;
 	
-	gfx_fence_event_t		gfxEndFrameFenceEvent;
+	HANDLE		gfxEndFrameFenceEvent;
 
 	// Default stuff, need to create material system later
-	gfx_memblob_t			*defaultVertexShader;
-	gfx_memblob_t			*defaultPixelShader;
-	gfx_pipeline_state_t	*defaultPSO;
-	gfx_resource_t			*defaultVertexBuffer;
-	gfx_resource_t			*defaultIndexBuffer;
-	gfx_vert_buffer_view_t	defaultVertexBufferView;
-	gfx_index_buffer_view_t	defaultIndexBufferView;
+	ID3DBlob			*defaultVertexShader;
+	ID3DBlob			*defaultPixelShader;
+	ID3D12PipelineState		*defaultPSO;
+	ID3D12Resource			*defaultVertexBuffer;
+	ID3D12Resource			*defaultIndexBuffer;
+	D3D12_VERTEX_BUFFER_VIEW	defaultVertexBufferView;
+	D3D12_INDEX_BUFFER_VIEW	defaultIndexBufferView;
 
-	gfx_viewport_t			gfxViewport;
-	gfx_rect_t				gfxScissorRect;
+	D3D12_VIEWPORT			gfxViewport;
+	D3D12_RECT				gfxScissorRect;
 
 	GfxResourceManager			*memManager;
 
@@ -374,7 +374,7 @@ struct GfxGameRenderer
 
 	void InitDebugLayer ()
 	{
-		gfx_info_queue_t *infoQueue;
+		ID3D12InfoQueue *infoQueue;
 
 		DXERROR( gfxDevice->QueryInterface ( __uuidof(ID3D12InfoQueue), (void**)&infoQueue ) );
 
@@ -389,7 +389,7 @@ struct GfxGameRenderer
 
 	void InitHWInterfaces ()
 	{
-		gfx_debug_t* debugController;
+		ID3D12Debug* debugController;
 		if ( SUCCEEDED ( D3D12GetDebugInterface ( IID_PPV_ARGS ( &debugController ) ) ) )
 		{
 			debugController->EnableDebugLayer ();
@@ -458,8 +458,8 @@ struct GfxGameRenderer
 	void InitDefaultPipelineState ()
 	{
 		UINT compileFlags = D3DCOMPILE_OPTIMIZATION_LEVEL3;
-		gfx_memblob_t *vsErrors;
-		gfx_memblob_t *psErrors;
+		ID3DBlob *vsErrors;
+		ID3DBlob *psErrors;
 
 		DXERROR ( D3DCompileFromFile ( L"C:\\Users\\wert\\Desktop\\RyanAndFriends\\RyanEngine\\RyanEngine\\Shaders\\shaders.hlsl", nullptr, nullptr, "vsmain", "vs_5_0", compileFlags, 0, &defaultVertexShader, &vsErrors ) );
 		
@@ -481,14 +481,14 @@ struct GfxGameRenderer
 			printf ( "%s\n", errorMsg );
 		}
 
-		gfx_input_desc_t inputElementDescs[] =
+		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 		};
 
 		// Define the vertex input layout.
-		gfx_pipeline_desc_t psoDesc = {};
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 		psoDesc.InputLayout = { inputElementDescs, _countof ( inputElementDescs ) };
 		psoDesc.pRootSignature = gfxRootSignature;
 		psoDesc.VS = CD3DX12_SHADER_BYTECODE ( defaultVertexShader );
@@ -614,7 +614,7 @@ struct GfxGameRenderer
 	void WaitEndFrameFence ()
 	{
 		GfxPerFrameData *curFrameData = perFrameData + frameIndex;
-		gfx_fence_t *curFrameEndFence = curFrameData->gfxEndFrameFence;
+		ID3D12Fence *curFrameEndFence = curFrameData->gfxEndFrameFence;
 
 		uint64_t endFrameFenceValue = curFrameData->gfxEndFrameFenceValue;
 
@@ -637,7 +637,7 @@ struct GfxGameRenderer
 		frameIndex = gfxSwapChain->GetCurrentBackBufferIndex ();
 
 		GfxPerFrameData *prevFrameData = perFrameData + frameIndex;
-		gfx_fence_t *prevFrameEndFence = prevFrameData->gfxEndFrameFence;
+		ID3D12Fence *prevFrameEndFence = prevFrameData->gfxEndFrameFence;
 
 		uint64_t endFrameFenceValue = prevFrameData->gfxEndFrameFenceValue;
 
@@ -670,7 +670,7 @@ struct GfxGameRenderer
 	{
 		GfxPerFrameData	*curFrameData = perFrameData + frameIndex;
 
-		gfx_cmdalloc_t *curCmdAllocator = curFrameData->gfxCmdAllocator;
+		ID3D12CommandAllocator *curCmdAllocator = curFrameData->gfxCmdAllocator;
 
 		// Command list allocators can only be reset when the associated 
 		// command lists have finished execution on the GPU; apps should use 
@@ -702,7 +702,7 @@ struct GfxGameRenderer
 		gfxCmdList->ClearDepthStencilView ( dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 0.0f, 0, 0, nullptr );
 		
 		
-		gfx_descheap_t* descriptorHeaps[] = { curFrameData->gfxCBVDescHeap };
+		ID3D12DescriptorHeap* descriptorHeaps[] = { curFrameData->gfxCBVDescHeap };
 		gfxCmdList->SetDescriptorHeaps ( _countof ( descriptorHeaps ), descriptorHeaps );
 		
 		// set the root descriptor table 0 to the constant buffer descriptor heap
@@ -719,7 +719,7 @@ struct GfxGameRenderer
 		DXERROR ( gfxCmdList->Close () );
 		
 		// Execute the command list.
-		cmdlist_t* cmdLists[] = { gfxCmdList }; // implicit cast from gfx_cmdlist_t to cmdlist_t interface
+		ID3D12CommandList* cmdLists[] = { gfxCmdList }; // implicit cast from gfx_cmdlist_t to cmdlist_t interface
 		gfxCmdQueue->ExecuteCommandLists ( _countof ( cmdLists ), cmdLists );
 		
 		// Present the frame.

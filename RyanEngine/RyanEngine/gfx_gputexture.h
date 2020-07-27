@@ -17,7 +17,7 @@ enum GfxTextureType
 
 struct GfxGpuTexture
 {
-	gfx_resource_t *resource;
+	ID3D12Resource *resource;
 	GfxTextureType type;
 	GFX_FORMAT format;
 	uint width;
@@ -28,11 +28,11 @@ struct GfxGpuTexture
 
 	GfxGpuTexture ( uint _width, uint _height, uint _depth, GFX_FORMAT _format, uint _mipLevels, uint _resourceFlags, GfxTextureType _type );
 
-	void CreateDefaultSRV ( gfx_desc_handle_t& descHandle );
-	void CreateDefaultUAV ( gfx_desc_handle_t& descHandle );
+	void CreateDefaultSRV ( D3D12_CPU_DESCRIPTOR_HANDLE& descHandle );
+	void CreateDefaultUAV ( D3D12_CPU_DESCRIPTOR_HANDLE& descHandle );
 
-	void CreateCustomTex2DSRV ( gfx_desc_handle_t& descHandle, uint firstMip, uint numMips, float minLODClamp );
-	void CreateCustomTex2DUAV ( gfx_desc_handle_t& descHandle, uint mipSlice );
+	void CreateCustomTex2DSRV ( D3D12_CPU_DESCRIPTOR_HANDLE& descHandle, uint firstMip, uint numMips, float minLODClamp );
+	void CreateCustomTex2DUAV ( D3D12_CPU_DESCRIPTOR_HANDLE& descHandle, uint mipSlice );
 
 
 	bool checkTextureResourceValid ( GFX_FORMAT format, bool useMips );

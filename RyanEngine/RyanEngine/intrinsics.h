@@ -7,7 +7,7 @@
 // bit functions
 inline uint CountLeadingZeros32 ( uint value )
 {
-	ulong index;
+	DWORD index;
 
 	if ( _BitScanReverse ( &index, value ) )
 		return static_cast< uint >( index );
@@ -18,7 +18,7 @@ inline uint CountLeadingZeros32 ( uint value )
 
 inline uint CountTrailingZeros32 ( uint value )
 {
-	ulong index;
+	DWORD index;
 
 	if ( _BitScanForward ( &index, value ) )
 		return static_cast< uint >( index );
@@ -39,13 +39,13 @@ inline bool TestBit32 ( uint value, uint bitPos )
 }
 
 
-#if IS_X64
+#if defined( IS_X64 )
 inline uint CountLeadingZeros64 ( uint64 value )
 {
-	ulong index;
+	DWORD index;
 
 	if ( _BitScanReverse64 ( &index, value ) )
-		return static_cast< uint >(index);
+		return static_cast< uint >( index );
 	else
 		return 0;
 }
@@ -53,7 +53,7 @@ inline uint CountLeadingZeros64 ( uint64 value )
 
 inline uint CountTrailingZeros64 ( uint64 value )
 {
-	ulong index;
+	DWORD index;
 
 	if ( _BitScanForward64 ( &index, value ) )
 		return static_cast< uint >(index);
@@ -76,9 +76,9 @@ inline bool TestBit64 ( uint64 value, uint bitPos )
 
 
 // functions for locks
-inline int32 AtomicCompareExchange ( v_int32 *ptr, int32 exchange, int32 comperand )
+inline int32 AtomicCompareExchange ( vint32 *ptr, int32 exchange, int32 comperand )
 {
-	return _InterlockedCompareExchange ( ptr, exchange, comperand );
+	return _InterlockedCompareExchange ( reinterpret_cast<volatile long*>( ptr ), exchange, comperand );
 }
 
 
@@ -88,44 +88,44 @@ inline void* AtomicCompareExchangePtr ( void * volatile *ptr, void *exchangePtr,
 }
 
 
-inline int32 AtomicExchange ( v_int32 *ptr, int32 value )
+inline int32 AtomicExchange ( vint32 *ptr, int32 value )
 {
-	return _InterlockedExchange ( ptr, value );
+	return _InterlockedExchange ( reinterpret_cast<volatile long*>( ptr ), value );
 }
 
 
-inline int32 AtomicExchangeAdd ( v_int32 *ptr, int32 value )
+inline int32 AtomicExchangeAdd ( vint32 *ptr, int32 value )
 {
-	return _InterlockedExchangeAdd ( ptr, value );
+	return _InterlockedExchangeAdd ( reinterpret_cast<volatile long*>(ptr), value );
 }
 
 
-inline int32 AtomicIncrement ( v_int32 *ptr )
+inline int32 AtomicIncrement ( vint32 *ptr )
 {
-	return _InterlockedIncrement ( ptr );
+	return _InterlockedIncrement ( reinterpret_cast<volatile long*>( ptr ) );
 }
 
 
-inline int32 AtomicDecrement ( v_int32 *ptr )
+inline int32 AtomicDecrement ( int32 *ptr )
 {
-	return _InterlockedDecrement ( ptr );
+	return _InterlockedDecrement ( reinterpret_cast<volatile long*>( ptr ) );
 }
 
 
-inline int32 AtomicAnd ( v_int32 *ptr, int32 value )
+inline int32 AtomicAnd ( int32 *ptr, int32 value )
 {
-	return _InterlockedAnd ( ptr, value );
+	return _InterlockedAnd ( reinterpret_cast<volatile long*>( ptr ), value );
 }
 
 
-inline int32 AtomicOr ( v_int32 *ptr, int32 value )
+inline int32 AtomicOr ( int32 *ptr, int32 value )
 {
-	return _InterlockedOr ( ptr, value );
+	return _InterlockedOr ( reinterpret_cast<volatile long*>( ptr ), value );
 }
 
 
-inline int32 AtomicXor ( v_int32 *ptr, int32 value )
+inline int32 AtomicXor ( int32 *ptr, int32 value )
 {
-	return _InterlockedXor ( ptr, value );
+	return _InterlockedXor ( reinterpret_cast<volatile long*>( ptr ), value );
 }
 

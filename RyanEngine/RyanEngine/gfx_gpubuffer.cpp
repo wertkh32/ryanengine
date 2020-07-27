@@ -4,7 +4,7 @@
 GfxGpuBuffer::GfxGpuBuffer ( uint _size, uint resourceFlags )
 {
 	GfxResourceManager *resman ;
-	gfx_resource_desc_t desc;
+	D3D12_RESOURCE_DESC desc;
 	bool isWriteCombine;
 	bool isUAV;
 
@@ -33,7 +33,7 @@ GfxGpuBuffer::~GfxGpuBuffer ()
 }
 
 
-void GfxGpuBuffer::CreateVertexBufferView ( gfx_vert_buffer_view_t * outVBView, uint size, uint offset, uint stride )
+void GfxGpuBuffer::CreateVertexBufferView ( D3D12_VERTEX_BUFFER_VIEW * outVBView, uint size, uint offset, uint stride )
 {
 	assert ( outVBView );
 	assert ( offset + size <= bufferSize );
@@ -43,7 +43,7 @@ void GfxGpuBuffer::CreateVertexBufferView ( gfx_vert_buffer_view_t * outVBView, 
 	outVBView->StrideInBytes = stride;
 }
 
-void GfxGpuBuffer::CreateIndexBufferView ( gfx_index_buffer_view_t * outIBView, uint size, uint offset, bool is16bits )
+void GfxGpuBuffer::CreateIndexBufferView ( D3D12_INDEX_BUFFER_VIEW * outIBView, uint size, uint offset, bool is16bits )
 {
 	assert ( outIBView );
 	assert ( offset + size <= bufferSize );
@@ -54,7 +54,7 @@ void GfxGpuBuffer::CreateIndexBufferView ( gfx_index_buffer_view_t * outIBView, 
 }
 
 
-void GfxGpuBuffer::CreateRawBufferView ( gfx_desc_handle_t & descHandle, uint size, uint firstElement )
+void GfxGpuBuffer::CreateRawBufferView ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint size, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( size <= bufferSize );
@@ -71,7 +71,7 @@ void GfxGpuBuffer::CreateRawBufferView ( gfx_desc_handle_t & descHandle, uint si
 }
 
 
-void GfxGpuBuffer::CreateRawBufferUAV ( gfx_desc_handle_t & descHandle, uint size, uint firstElement )
+void GfxGpuBuffer::CreateRawBufferUAV ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint size, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( size <= bufferSize );
@@ -88,7 +88,7 @@ void GfxGpuBuffer::CreateRawBufferUAV ( gfx_desc_handle_t & descHandle, uint siz
 }
 
 
-void GfxGpuBuffer::CreateStructuredBufferView ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements, uint firstElement )
+void GfxGpuBuffer::CreateStructuredBufferView ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint sizeOfElement, uint numElements, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( sizeOfElement * numElements <= bufferSize );
@@ -106,7 +106,7 @@ void GfxGpuBuffer::CreateStructuredBufferView ( gfx_desc_handle_t & descHandle, 
 }
 
 
-void GfxGpuBuffer::CreateTypedBufferView ( gfx_desc_handle_t & descHandle, GFX_TBUFFER_FORMAT format, uint numElements, uint firstElement )
+void GfxGpuBuffer::CreateTypedBufferView ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, GFX_TBUFFER_FORMAT format, uint numElements, uint firstElement )
 {
 	uint elemSize;
 
@@ -131,7 +131,7 @@ void GfxGpuBuffer::CreateTypedBufferView ( gfx_desc_handle_t & descHandle, GFX_T
 }
 
 
-void GfxGpuBuffer::CreateStructuredBufferUAV ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements, uint firstElement )
+void GfxGpuBuffer::CreateStructuredBufferUAV ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint sizeOfElement, uint numElements, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( sizeOfElement * numElements <= bufferSize );
@@ -150,7 +150,7 @@ void GfxGpuBuffer::CreateStructuredBufferUAV ( gfx_desc_handle_t & descHandle, u
 }
 
 
-void GfxGpuBuffer::CreateStructuredBufferUAVWithCounter ( gfx_desc_handle_t & descHandle, uint sizeOfElement, uint numElements, gfx_resource_t * counterBuffer, uint counterOffset, uint firstElement )
+void GfxGpuBuffer::CreateStructuredBufferUAVWithCounter ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint sizeOfElement, uint numElements, ID3D12Resource * counterBuffer, uint counterOffset, uint firstElement )
 {
 	assert ( g_gfxDevice );
 	assert ( counterBuffer );
@@ -170,7 +170,7 @@ void GfxGpuBuffer::CreateStructuredBufferUAVWithCounter ( gfx_desc_handle_t & de
 }
 
 
-void GfxGpuBuffer::CreateTypedUAV ( gfx_desc_handle_t & descHandle, GFX_TBUFFER_FORMAT format, uint numElements, uint firstElement )
+void GfxGpuBuffer::CreateTypedUAV ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, GFX_TBUFFER_FORMAT format, uint numElements, uint firstElement )
 {
 	uint elemSize;
 
@@ -194,7 +194,7 @@ void GfxGpuBuffer::CreateTypedUAV ( gfx_desc_handle_t & descHandle, GFX_TBUFFER_
 }
 
 
-void GfxGpuBuffer::CreateConstantBufferView ( gfx_desc_handle_t & descHandle, uint offset, uint size )
+void GfxGpuBuffer::CreateConstantBufferView ( D3D12_CPU_DESCRIPTOR_HANDLE & descHandle, uint offset, uint size )
 {
 	assert ( g_gfxDevice );
 	assert ( offset + size <= bufferSize );
